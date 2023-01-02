@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% load bootstrap4 %}
+{% load static %}
+{% bootstrap_css %}
+{% bootstrap_javascript jquery='full' %}
+{% block title %}
+    <h1>Карточки для изучения</h1>
+{% endblock %}
+{% block content %}
+    <table class="table table-striped">
+      <thead>
+        <tr>
+            <th>Колода</th>
+            <th>Новые</th>
+            <th>К повторению</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for deck in decks %}
+            <tr>
+                <td>
+                    <a href="{% url 'decks:learn' pk=deck.id %}">{{ deck.name }}</a>
+                </td>
+                {% if deck.new_cards.count == 0 %}
+                    <td class="text-muted">
+                        {{ deck.new_cards.count }}
+                    </td>
+                {% else %}
+                    <td class="text-success">
+                        {{ deck.new_cards.count }}
+                    </td>
+                {% endif %}
+                {% if deck.old_cards.count == 0 %}
+                    <td class="text-muted">
+                        {{ deck.old_cards.count }}
+                    </td>
+                {% else %}
+                    <td class="text-primary">
+                        {{ deck.old_cards.count }}
+                    </td>
+                {% endif %}
+            </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+{% endblock%}

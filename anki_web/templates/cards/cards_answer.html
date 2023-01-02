@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% load card_extras %}
+{% load bootstrap4 %}
+{% load static %}
+{% bootstrap_css %}
+{% bootstrap_javascript jquery='full' %}
+{% block content %}
+            <div class="card">
+                <div class="card-header bg-white">
+                    <h4 class="text-muted text-center">Вопрос:</h4>
+                    {% if card.question_type == 'md' %}
+                        <p class="text-center">{{ card.question | convert_markdown | safe }}</p>
+                    {% elif card.question_type == 'html' %}
+                            <p class="text-center">
+                                {% autoescape off %}
+                                    {{ card.question }}
+                                {% endautoescape %}
+                            </p>
+                    {% elif card.question_type == 'text' %}
+                            <p class="text-center">
+                                {% autoescape on %}
+                                    {{ card.question }}
+                                {% endautoescape %}
+                            </p>
+                    {% endif %}
+                    <hr>
+                    <h4 class="text-muted text-center answer">Ответ:</h4>
+                        {% if card.answer_type == 'md' %}
+                            <p class="text-center">{{ card.answer | convert_markdown | safe }}</p>
+                        {% elif card.answer_type == 'html' %}
+                            <p class="text-center">
+                                {% autoescape off %}
+                                    {{ card.answer }}
+                                {% endautoescape %}
+                            </p>
+                        {% elif card.answer_type == 'text' %}
+                            <p class="text-center">
+                                {% autoescape on %}
+                                    {{ card.answer }}
+                                {% endautoescape %}
+                            </p>
+                        {% endif %}
+                    <div class="row row-col-4">
+                        <div class="col">
+                            <form action="{% url 'cards:answer' card_id=card.id quality=5 %}" method="post">
+                                {% csrf_token %}
+                                <input type="submit" value="Очень легко">
+                            </form>
+                        </div>
+                        <div class="col">
+                            <form action="{% url 'cards:answer' card_id=card.id quality=4 %}" method="post">
+                                {% csrf_token %}
+                                <input type="submit" value="Легко">
+                            </form>
+                        </div>
+                        <div class="col">
+                            <form action="{% url 'cards:answer' card_id=card.id quality=3 %}" method="post">
+                                {% csrf_token %}
+                                <input type="submit" value="Норм">
+                            </form>
+                        </div>
+                        <div class="col">
+                            <form action="{% url 'cards:answer' card_id=card.id quality=2 %}" method="post">
+                                {% csrf_token %}
+                                <input type="submit" value="Сложно">
+                            </form>
+                        </div>
+                        <div class="col">
+                            <form action="{% url 'cards:answer' card_id=card.id quality=1 %}" method="post">
+                                {% csrf_token %}
+                                <input type="submit" value="Очень сложно">
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+{% endblock %}

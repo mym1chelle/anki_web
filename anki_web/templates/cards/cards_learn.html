@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% load card_extras %}
+{% load bootstrap4 %}
+{% load static %}
+{% bootstrap_css %}
+{% bootstrap_javascript jquery='full' %}
+{% block content %}
+    {% if not cards %}
+        <h4 class="text-center">На сегодня все!</h4>
+    {% endif %}
+         {% for card in cards %}
+            <div class="card">
+                <div class="card-header bg-white">
+                    <h4 class="text-muted text-center">Вопрос:</h4>
+                    {% if card.question_type == 'md' %}
+                        <p class="text-center">{{ card.question | convert_markdown | safe }}</p>
+                    {% elif card.question_type == 'html' %}
+                            <p class="text-center">
+                                {% autoescape off %}
+                                    {{ card.question }}
+                                {% endautoescape %}
+                            </p>
+                    {% elif card.question_type == 'text' %}
+                            <p class="text-center">
+                                {% autoescape on %}
+                                    {{ card.question }}
+                                {% endautoescape %}
+                            </p>
+                    {% endif %}
+                    <a class="btn btn-primary d-block mx-auto w-25" href="{% url 'decks:answer' card_id=card.id%}">Ответ</a>
+                </div>
+            </div>
+        {% endfor %}
+{% endblock %}
