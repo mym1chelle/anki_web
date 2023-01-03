@@ -1,12 +1,15 @@
-from supermemo2 import SMTwo
+from django.contrib.auth.mixins import AccessMixin
+from django.contrib import messages
+from django.shortcuts import redirect
 
-review = SMTwo.first_review(5)
-review = SMTwo(review.easiness, review.interval, review.repetitions).review(5)
-review = SMTwo(review.easiness, review.interval, review.repetitions).review(5)
-review = SMTwo(review.easiness, review.interval, review.repetitions).review(3)
-review = SMTwo(review.easiness, review.interval, review.repetitions).review(5)
-review = SMTwo(review.easiness, review.interval, review.repetitions).review(5)
-print(review.easiness)
-print(review.interval)
-print(review.repetitions)
-print(review.review_date)
+
+class CheckConnectMixin(AccessMixin):
+    def form_valid(self, form):
+        """Check if any other objects are linked to the given object."""
+        result = self.object.cards_set.all()
+        if result:
+            messages.error(self.request, 'Нельзя удалить не пустую колоду')
+        else:
+            self.object.delete()
+            messages.success(self.request, 'Колода успешно удалена')
+        return redirect(self.get_success_url())

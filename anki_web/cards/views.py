@@ -18,14 +18,14 @@ from django.core.exceptions import ImproperlyConfigured
 import io
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q, Count
-from django.views import View
+from random import randint
 
 
 class ListCardsView(LoginRequiredMixin, ListView):
     model = Cards
     template_name = 'cards/cards.html'
     context_object_name = 'cards'
-    paginate_by = 14
+    paginate_by = 13
 
     def get_queryset(self):
 
@@ -97,6 +97,7 @@ class CreateCardView(LoginRequiredMixin,
     def form_valid(self, form):
         form.instance.created_by = Users.objects.get(pk=self.request.user.id)
         form.instance.deck = Decks.objects.get(pk=self.kwargs['pk'])
+        form.instance.random_num = randint(1, 2000)
         return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
@@ -161,7 +162,8 @@ def upload_file(request, pk):
                             answer_type=answer_type,
                             style=style,
                             deck=deck,
-                            created_by=user
+                            created_by=user,
+                            random_num = randint(1, 2000)
                         )
                     messages.success(request, 'Карточки были успешно импортированы')
                 return redirect(reverse_lazy('decks:cards', kwargs={'pk': pk}))
@@ -276,8 +278,20 @@ def show_answer(request, card_id):
 
 def delete_select_cards(request, pk):
     selected = request.POST.getlist('select')
-    for select_id in selected:
-        card = Cards.objects.get(id=select_id)
+    if selected:
+        for select_id in selected:
+            card = Cards.objects.get(id=select_id)
+            card.delete()
+        messages.success(request, 'Карточки были успешно удалены')
+    else:
+        messages.error(request, 'Вы не выбрали ни одной карточки')
+    return redirect(reverse_lazy('decks:cards', kwargs={'pk': pk}))
+
+
+def delete_all_cards(request, pk):
+    deck = Decks.objects.get(id=pk)
+    cards = Cards.objects.filter(deck=deck)
+    for card in cards:
         card.delete()
     messages.success(request, 'Карточки были успешно удалены')
     return redirect(reverse_lazy('decks:cards', kwargs={'pk': pk}))

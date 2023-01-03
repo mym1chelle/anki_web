@@ -7,6 +7,7 @@
             <th>Название</th>
             <th></th>
             <th></th>
+            <th></th>
         </tr>
       </thead>
       <tbody>
@@ -20,6 +21,9 @@
                 </td>
                 <td>
                     <a href="{% url 'decks:upload' pk=deck.id %}">Загрузить карточки</a>
+                </td>
+                <td>
+                    <a href="{% url 'decks:delete' pk=deck.id %}">Удалить колоду</a>
                 </td>
             </tr>
         {% endfor %}

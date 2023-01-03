@@ -6,6 +6,9 @@ from  anki_web.users.models import Users
 
 class Cards(models.Model):
 
+    class Meta:
+        ordering = ['random_num']
+
     TYPES = [
         ('md', 'Markdown'),
         ('text', 'Text'),
@@ -24,6 +27,7 @@ class Cards(models.Model):
     interval = models.IntegerField(null=True)
     repetitions = models.IntegerField(null=True)
     review_date = models.DateField(null=True)
+    random_num = models.IntegerField(null=True)
 
     def __str__(self):
         return self.question

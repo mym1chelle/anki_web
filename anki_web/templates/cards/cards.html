@@ -21,7 +21,7 @@
           {% csrf_token %}
             <tr>
                 <td>
-                        <input type="checkbox" name="select" value="{{ card.pk }}">
+                    <input type="checkbox" name="select" value="{{ card.pk }}">
                 </td>
                 <td>
                     <a href="{% url 'cards:show_card' pk=card.id %}">{{ card.question | truncatechars:19 }}</a>
@@ -37,7 +37,8 @@
                 </td>
             </tr>
         {% endfor %}
-          <input type="submit" value="Удалить">
+          <input class="btn btn-danger mb-2 mr-2" type="submit" value="Удалить">
+          <a class="btn btn-danger mb-2" href="{% url 'decks:delete_all' pk=deck_id%}">Удалить все карточки</a>
       </form>
       </tbody>
     </table>
