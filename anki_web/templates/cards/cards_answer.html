@@ -5,6 +5,7 @@
 {% bootstrap_css %}
 {% bootstrap_javascript jquery='full' %}
 {% block content %}
+        <p class="display-6 text-primary text-center">Осталось {{ count.count }} карточек</p>
             <div class="card">
                 <div class="card-header bg-white">
                     <h4 class="text-muted text-center">Вопрос:</h4>
@@ -25,6 +26,9 @@
                     {% endif %}
                     <hr>
                     <h4 class="text-muted text-center answer">Ответ:</h4>
+                    {% if answer %}
+                        <p class="text-center text-primary">{{ answer }}</p>
+                    {% endif %}
                         {% if card.answer_type == 'md' %}
                             <p class="text-center">{{ card.answer | convert_markdown | safe }}</p>
                         {% elif card.answer_type == 'html' %}

@@ -5,6 +5,7 @@
 {% bootstrap_css %}
 {% bootstrap_javascript jquery='full' %}
 {% block content %}
+    <p class="display-6 text-primary text-center">Осталось {{ count.count }} карточек</p>
     {% if not cards %}
         <h4 class="text-center">На сегодня все!</h4>
     {% endif %}
@@ -27,7 +28,17 @@
                                 {% endautoescape %}
                             </p>
                     {% endif %}
-                    <a class="btn btn-primary d-block mx-auto w-25" href="{% url 'decks:answer' card_id=card.id%}">Ответ</a>
+                    {% if card.style.id == 2 %}
+                    <div class="form-group">
+                        <form action="{% url 'decks:answer' card_id=card.id %}" method="post">
+                            {% csrf_token %}
+                            <textarea class="form-control" name="answer"></textarea>
+                            <input class="btn btn-primary w-25 mt-2" type="submit" value="Ввести">
+                        </form>
+                    </div>
+                    {% else %}
+                        <a class="btn btn-primary d-block mx-auto w-25" href="{% url 'decks:answer' card_id=card.id %}">Ответ</a>
+                    {% endif %}
                 </div>
             </div>
         {% endfor %}

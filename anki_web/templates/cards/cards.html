@@ -8,6 +8,7 @@
     <table class="table table-striped">
       <thead>
         <tr>
+            <th></th>
             <th>Вопрос</th>
             <th>Тип карточки</th>
             <th>Дата создания</th>
@@ -15,8 +16,13 @@
         </tr>
       </thead>
       <tbody>
+      <form action="{% url 'decks:select' pk=deck_id %}" method="post">
         {% for card in cards %}
+          {% csrf_token %}
             <tr>
+                <td>
+                        <input type="checkbox" name="select" value="{{ card.pk }}">
+                </td>
                 <td>
                     <a href="{% url 'cards:show_card' pk=card.id %}">{{ card.question | truncatechars:19 }}</a>
                 </td>
@@ -31,6 +37,8 @@
                 </td>
             </tr>
         {% endfor %}
+          <input type="submit" value="Удалить">
+      </form>
       </tbody>
     </table>
     <ul class="pagination pagination-sm justify-content-center">

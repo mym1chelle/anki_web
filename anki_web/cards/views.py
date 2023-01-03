@@ -18,6 +18,7 @@ from django.core.exceptions import ImproperlyConfigured
 import io
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q, Count
+from django.views import View
 
 
 class ListCardsView(LoginRequiredMixin, ListView):
@@ -42,6 +43,11 @@ class ListCardsView(LoginRequiredMixin, ListView):
                 ordering = (ordering,)
             queryset = queryset.order_by(*ordering)
         return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['deck_id'] = self.kwargs['pk']
+        return context
 
 
 class DetailCardView(LoginRequiredMixin, DetailView):
@@ -75,7 +81,7 @@ class CreateCardView(LoginRequiredMixin,
             Decks.objects.get(pk=self.kwargs['pk'])
         except ObjectDoesNotExist:
             messages.error(self.request, 'Такой колоды не существует')
-            return redirect('/')
+            return redirect('decks:decks')
         else:
             return super().get(request, *args, **kwargs)
 
@@ -83,9 +89,8 @@ class CreateCardView(LoginRequiredMixin,
         try:
             Decks.objects.get(pk=self.kwargs['pk'])
         except ObjectDoesNotExist:
-            print('wow')
             messages.error(self.request, 'Невозможно добавить карточку в несуществующую колоду')
-            return redirect('/')
+            return redirect('decks:decks')
         else:
             return super().post(request, *args, **kwargs)
 
@@ -93,6 +98,10 @@ class CreateCardView(LoginRequiredMixin,
         form.instance.created_by = Users.objects.get(pk=self.request.user.id)
         form.instance.deck = Decks.objects.get(pk=self.kwargs['pk'])
         return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['text_button'] = 'Создать'
 
 
 class UpdateCardView(LoginRequiredMixin,
@@ -104,12 +113,22 @@ class UpdateCardView(LoginRequiredMixin,
     success_url = reverse_lazy('main_page')
     success_message = 'Карточка успешно обновлена'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['text_button'] = 'Обновить'
+        return context
+
 
 class DeleteCardView(SuccessMessageMixin, DeleteView):
     template_name = 'delete.html'
     model = Cards
     success_url = reverse_lazy('decks:decks')
     success_message = 'Карточка успешно удалена'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['text_button '] = 'Удалить'
+        return context
 
 
 @login_required
@@ -117,7 +136,6 @@ def upload_file(request, pk):
     try:
         Decks.objects.get(pk=pk)
     except ObjectDoesNotExist:
-        print('wow')
         messages.error(request, 'Невозможно добавить карточки в несуществующую колоду')
         return redirect('/')
     else:
@@ -149,7 +167,14 @@ def upload_file(request, pk):
                 return redirect(reverse_lazy('decks:cards', kwargs={'pk': pk}))
         else:
             form = UploadFileForm()
-        return render(request, 'cards/upload.html', {'form': form})
+        return render(
+            request,
+            'cards/upload.html',
+            context={
+                'form': form,
+                'text_button': 'Импортировать'
+            }
+        )
 
 
 def check_answer(request, quality, card_id):
@@ -210,12 +235,9 @@ class ListCardsDayView(LoginRequiredMixin,
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         queryset = Cards.objects.filter(deck=self.kwargs['pk'])
-        count_new = queryset.filter(review_date__isnull=True)
-        count_new = count_new.aggregate(Count('question'))
-        count_old = queryset.filter(review_date__lte=date.today())
-        count_old = count_old.aggregate(Count('question'))
-        context['count_new'] = count_new
-        context['count_old'] = count_old
+        queryset = queryset.filter(Q(review_date__isnull=True) | Q(review_date__lte=date.today()))
+        count = queryset.aggregate(count=Count('question'))
+        context['count'] = count
         return context
 
 
@@ -227,14 +249,35 @@ def show_answer(request, card_id):
         return redirect('/')
     else:
         card = Cards.objects.get(id=card_id)
-        return render(
-            request,
-            'cards/cards_answer.html',
-            context={
-                'card': card
-            }
-        )
+        deck = Decks.objects.get(id=card.deck.id)
+        queryset = Cards.objects.filter(deck=deck)
+        queryset = queryset.filter(Q(review_date__isnull=True) | Q(review_date__lte=date.today()))
+        count = queryset.aggregate(count=Count('question'))
+        if request.POST.get('answer'):
+            return render(
+                request,
+                'cards/cards_answer.html',
+                context={
+                    'card': card,
+                    'count': count,
+                    'answer': request.POST.get('answer')
+                }
+            )
+        else:
+            return render(
+                request,
+                'cards/cards_answer.html',
+                context={
+                    'card': card,
+                    'count': count
+                }
+            )
 
 
-
-
+def delete_select_cards(request, pk):
+    selected = request.POST.getlist('select')
+    for select_id in selected:
+        card = Cards.objects.get(id=select_id)
+        card.delete()
+    messages.success(request, 'Карточки были успешно удалены')
+    return redirect(reverse_lazy('decks:cards', kwargs={'pk': pk}))
