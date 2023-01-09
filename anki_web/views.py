@@ -1,9 +1,8 @@
 from django.views.generic import ListView
 from django.contrib.auth.views import LoginView
 from datetime import date
-from django.db.models import Q, Count
+from django.db.models import Count
 from anki_web.decks.models import Decks
-from anki_web.cards.models import Cards
 
 
 class MainPageView(ListView):
@@ -12,9 +11,7 @@ class MainPageView(ListView):
     context_object_name = 'decks'
 
     def get_queryset(self):
-
         if self.model is not None:
-            # queryset = dict()
             decks = self.model._default_manager.all()
             queryset = [{
                     'id': deck.id,

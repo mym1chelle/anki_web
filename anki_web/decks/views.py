@@ -24,6 +24,11 @@ class CreateDeckView(SuccessMessageMixin, CreateView):
         form.instance.created_by = Users.objects.get(pk=self.request.user.id)
         return super().form_valid(form)
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['text_button'] = 'Добавить'
+        return context
+
 
 class DeleteDeckView(SuccessMessageMixin, CheckConnectMixin, DeleteView):
     model = Decks

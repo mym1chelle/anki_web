@@ -1,10 +1,5 @@
-from django.contrib.auth.mixins import AccessMixin
-from django.contrib.messages.views import SuccessMessageMixin
-from django.views.generic import CreateView,\
-    ListView, UpdateView, DeleteView
+from django.views.generic import CreateView
 from django.urls import reverse_lazy
-from django.contrib import messages
-from django.shortcuts import redirect
 from .models import Users
 from .forms import CreateUserForm
 
