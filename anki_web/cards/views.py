@@ -1,5 +1,6 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
+from django.views import View
 from django.views.generic import CreateView,\
     ListView, UpdateView, DeleteView, DetailView
 from django.urls import reverse_lazy
@@ -258,6 +259,32 @@ def show_answer(request, card_id):
             )
 
 
+class DeleteSelectCardsView(DeleteView):
+    template_name = 'delete.html'
+    model = Cards
+    success_url = reverse_lazy('decks:decks')
+    success_message = 'Карточки успешно удаленыs'
+
+    def get_object(self, queryset=None):
+        pk = self.kwargs.get(self.pk_url_kwarg)
+        if pk is not None:
+            deck = Decks.objects.get(id=pk)
+            queryset = self.model._default_manager.filter(deck=deck)
+        return queryset
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        if not self.object:
+            messages.info(self.request, 'Колода пустая')
+            return redirect('decks:decks')
+        return super().get(self, request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['text_button'] = 'Удалить'
+        context['deck'] = Decks.objects.get(id=self.kwargs['pk'])
+        return context
+
 def delete_select_cards(request, pk):
     selected = request.POST.getlist('select')
     if selected:
@@ -270,34 +297,31 @@ def delete_select_cards(request, pk):
     return redirect(reverse_lazy('decks:cards', kwargs={'pk': pk}))
 
 
-class DeleteSelectView(DeleteView):
+class DeleteAllCardsView(DeleteView):
     template_name = 'delete.html'
     model = Cards
     success_url = reverse_lazy('decks:decks')
-    success_message = 'Карточка успешно удалена'
+    success_message = 'Карточки успешно удаленыs'
 
-    def form_valid(self, form):
-        success_url = self.get_success_url()
-        selected = self.request.POST.getlist('select')
-        print(selected)
-        if selected:
-            for select_id in selected:
-                card = Cards.objects.get(id=select_id)
-                card.delete()
-        return redirect(success_url)
+    def get_object(self, queryset=None):
+        pk = self.kwargs.get(self.pk_url_kwarg)
+        if pk is not None:
+            deck = Decks.objects.get(id=pk)
+            queryset = self.model._default_manager.filter(deck=deck)
+        return queryset
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        if not self.object:
+            messages.info(self.request, 'Колода пустая')
+            return redirect('decks:decks')
+        return super().get(self, request, *args, **kwargs)
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['text_button'] = 'Удалить'
+        context['deck'] = Decks.objects.get(id=self.kwargs['pk'])
         return context
-
-
-def delete_all_cards(request, pk):
-    deck = Decks.objects.get(id=pk)
-    cards = Cards.objects.filter(deck=deck)
-    for card in cards:
-        card.delete()
-    messages.success(request, 'Карточки были успешно удалены')
-    return redirect(reverse_lazy('decks:cards', kwargs={'pk': pk}))
 
 
 # попытка разобраться с DRF
