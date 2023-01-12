@@ -40,6 +40,7 @@ class ListCardsView(LoginRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['deck_id'] = self.kwargs['pk']
+        context['count'] = self.model.objects.filter(deck=self.kwargs['pk']).aggregate(count=Count('question'))
         return context
 
 
@@ -174,7 +175,6 @@ def download_file(request, pk):
     return response
 
 
-
 def check_answer(request, quality, card_id):
     try:
         Cards.objects.get(id=card_id)
@@ -301,11 +301,11 @@ def delete_select_cards(request, pk):
     return redirect(reverse_lazy('decks:cards', kwargs={'pk': pk}))
 
 
-class DeleteAllCardsView(DeleteView):
+class DeleteAllCardsView(SuccessMessageMixin, DeleteView):
     template_name = 'delete.html'
     model = Cards
     success_url = reverse_lazy('decks:decks')
-    success_message = 'Карточки успешно удаленыs'
+    success_message = 'Карточки успешно удалены'
 
     def get_object(self, queryset=None):
         pk = self.kwargs.get(self.pk_url_kwarg)

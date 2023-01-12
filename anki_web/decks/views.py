@@ -5,6 +5,7 @@ from .models import Decks
 from anki_web.users.models import Users
 from .forms import CreateDeskForm
 from anki_web.custom_mixins.mixins import CheckConnectMixin
+from django.db.models import Count
 
 
 class ListDecksView(ListView):

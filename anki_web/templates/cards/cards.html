@@ -37,9 +37,17 @@
                 </td>
             </tr>
         {% endfor %}
-          <input class="btn btn-danger mb-2 mr-2" type="submit" onclick="delete_confirm(event)"value="Удалить">
-          <a class="btn btn-danger mb-2 mr-2" href="{% url 'decks:delete_all' pk=deck_id%}">Удалить все карточки</a>
-          <a class="btn btn-primary mb-2" href="{% url 'decks:download' pk=deck_id%}">Скачать</a>
+          <div class="row row-col-3">
+            <div class="col">
+                <input class="btn btn-danger mb-2 mr-2" type="submit" onclick="delete_confirm(event)"value="Удалить">
+                <a class="btn btn-danger mb-2 mr-2" href="{% url 'decks:delete_all' pk=deck_id%}">Удалить все карточки</a>
+            </div>
+            <div class="col"></div>
+              <div class="col">
+                    <text class="mr-2">Карточек в колоде: {{ count.count }}</text>
+                    <a class="btn btn-primary mb-2" href="{% url 'decks:download' pk=deck_id%}">Скачать</a>
+                </div>
+          </div>
       </form>
       </tbody>
     </table>
