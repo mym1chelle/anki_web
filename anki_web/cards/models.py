@@ -1,7 +1,7 @@
 from django.db import models
 from anki_web.styles.models import Styles
 from anki_web.decks.models import Decks
-from  anki_web.users.models import Users
+from anki_web.users.models import Users
 
 
 class Cards(models.Model):

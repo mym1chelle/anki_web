@@ -30,17 +30,10 @@ class ListCardsView(LoginRequiredMixin, ListView):
     template_name = 'cards/cards.html'
     context_object_name = 'cards'
     paginate_by = 13
+    ordering = ['-created_at']
 
     def get_queryset(self):
-
-        if self.model is not None:
-            queryset = self.model._default_manager.filter(deck=self.kwargs['pk'])
-        else:
-            raise ImproperlyConfigured(
-                "%(cls)s is missing a QuerySet. Define "
-                "%(cls)s.model, %(cls)s.queryset, or override "
-                "%(cls)s.get_queryset()." % {"cls": self.__class__.__name__}
-            )
+        queryset = self.model._default_manager.filter(deck=self.kwargs['pk'])
         ordering = self.get_ordering()
         if ordering:
             if isinstance(ordering, str):
@@ -58,14 +51,6 @@ class DetailCardView(LoginRequiredMixin, DetailView):
     context_object_name = 'card'
     model = Cards
     template_name = 'cards/show_card.html'
-
-    def get(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        context = self.get_context_data(object=self.object)
-        hidden = request.GET.get('showFullText')
-        if hidden:
-            context['showFullText'] = True
-        return self.render_to_response(context)
 
 
 class CreateCardView(LoginRequiredMixin,
@@ -107,6 +92,7 @@ class CreateCardView(LoginRequiredMixin,
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['text_button'] = 'Создать'
+        return context
 
 
 class UpdateCardView(LoginRequiredMixin,
@@ -132,7 +118,7 @@ class DeleteCardView(SuccessMessageMixin, DeleteView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['text_button '] = 'Удалить'
+        context['text_button'] = 'Удалить'
         return context
 
 
@@ -197,6 +183,9 @@ def check_answer(request, quality, card_id):
             if request.method == 'POST':
                 card = Cards.objects.get(id=card_id)
                 if card.review_date:
+                    # изменил код в SMTwo: была ошибка, из-за того что карточки не повторялись в заданный день
+                    # добавил условие, что если дата повторения карточки не равна сегодняшней дате, то она изменияется
+                    # на сегодняшнюю
                     review = SMTwo(
                         card.easiness,
                         card.interval,
@@ -215,27 +204,16 @@ def check_answer(request, quality, card_id):
 
 class ListCardsDayView(LoginRequiredMixin,
                        ListView):
-    paginate_by = 1
+    # paginate_by = 1
     template_name = 'cards/cards_learn.html'
-    context_object_name = 'cards'
+    context_object_name = 'card'
     model = Cards
 
     def get_queryset(self):
-
-        if self.model is not None:
-            queryset = self.model._default_manager.filter(deck=self.kwargs['pk'])
-            queryset = queryset.filter(Q(review_date__isnull=True) | Q(review_date__lte=date.today()))
-        else:
-            raise ImproperlyConfigured(
-                "%(cls)s is missing a QuerySet. Define "
-                "%(cls)s.model, %(cls)s.queryset, or override "
-                "%(cls)s.get_queryset()." % {"cls": self.__class__.__name__}
-            )
-        ordering = self.get_ordering()
-        if ordering:
-            if isinstance(ordering, str):
-                ordering = (ordering,)
-            queryset = queryset.order_by(*ordering)
+        queryset = self.model._default_manager.filter(deck=self.kwargs['pk'])
+        queryset = queryset.filter(Q(review_date__isnull=True) | Q(review_date__lte=date.today()))
+        if queryset:
+            return queryset[0]
         return queryset
 
     def get_context_data(self, **kwargs):
@@ -290,6 +268,27 @@ def delete_select_cards(request, pk):
     else:
         messages.error(request, 'Вы не выбрали ни одной карточки')
     return redirect(reverse_lazy('decks:cards', kwargs={'pk': pk}))
+
+
+class DeleteSelectView(DeleteView):
+    template_name = 'delete.html'
+    model = Cards
+    success_url = reverse_lazy('decks:decks')
+    success_message = 'Карточка успешно удалена'
+
+    def form_valid(self, form):
+        success_url = self.get_success_url()
+        selected = self.request.POST.getlist('select')
+        print(selected)
+        if selected:
+            for select_id in selected:
+                card = Cards.objects.get(id=select_id)
+                card.delete()
+        return redirect(success_url)
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['text_button'] = 'Удалить'
+        return context
 
 
 def delete_all_cards(request, pk):

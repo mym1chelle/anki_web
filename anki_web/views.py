@@ -18,7 +18,7 @@ class MainPageView(ListView):
                     'name': deck.name,
                     'new_cards': deck.cards_set.filter(review_date__isnull=True).aggregate(count=Count('question')),
                     'old_cards': deck.cards_set.filter(review_date__lte=date.today()).aggregate(count=Count('question'))
-            } for deck in decks]
+            } for deck in decks if deck.cards_set.all()]
             return queryset
 
 
