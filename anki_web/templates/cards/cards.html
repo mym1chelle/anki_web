@@ -38,7 +38,8 @@
             </tr>
         {% endfor %}
           <input class="btn btn-danger mb-2 mr-2" type="submit" onclick="delete_confirm(event)"value="Удалить">
-          <a class="btn btn-danger mb-2" href="{% url 'decks:delete_all' pk=deck_id%}">Удалить все карточки</a>
+          <a class="btn btn-danger mb-2 mr-2" href="{% url 'decks:delete_all' pk=deck_id%}">Удалить все карточки</a>
+          <a class="btn btn-primary mb-2" href="{% url 'decks:download' pk=deck_id%}">Скачать</a>
       </form>
       </tbody>
     </table>

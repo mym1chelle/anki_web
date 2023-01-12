@@ -7,7 +7,8 @@ from anki_web.cards.views import (
     ListCardsDayView,
     show_answer,
     delete_select_cards,
-    DeleteAllCardsView
+    DeleteAllCardsView,
+    download_file
 )
 
 app_name = 'decks'
@@ -23,4 +24,5 @@ urlpatterns = [
     path('<int:pk>/cards/', ListCardsView.as_view(), name='cards'),
     path('<int:pk>/learn/', ListCardsDayView.as_view(), name='learn'),
     path('<int:card_id>/answer/', show_answer, name='answer'),
+    path('<int:pk>/download/', download_file, name='download')
 ]

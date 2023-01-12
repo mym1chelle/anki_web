@@ -1,6 +1,6 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
-from django.views import View
+from django.http import HttpResponse
 from django.views.generic import CreateView,\
     ListView, UpdateView, DeleteView, DetailView
 from django.urls import reverse_lazy
@@ -15,7 +15,6 @@ from .forms import CreateCardForm, UploadFileForm
 from django.contrib import messages
 from django.db.models import ObjectDoesNotExist
 from django.shortcuts import redirect, render
-from django.core.exceptions import ImproperlyConfigured
 import io
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q, Count
@@ -34,12 +33,8 @@ class ListCardsView(LoginRequiredMixin, ListView):
     ordering = ['-created_at']
 
     def get_queryset(self):
-        queryset = self.model._default_manager.filter(deck=self.kwargs['pk'])
         ordering = self.get_ordering()
-        if ordering:
-            if isinstance(ordering, str):
-                ordering = (ordering,)
-            queryset = queryset.order_by(*ordering)
+        queryset = self.model._default_manager.filter(deck=self.kwargs['pk']).order_by(*ordering)
         return queryset
 
     def get_context_data(self, **kwargs):
@@ -63,8 +58,7 @@ class CreateCardView(LoginRequiredMixin,
     success_message = 'Карточка успешно добавлена'
 
     def get_success_url(self):
-        url = reverse_lazy('decks:cards', kwargs={'pk': self.kwargs['pk']})
-        return url
+        return reverse_lazy('decks:cards', kwargs={'pk': self.kwargs['pk']})
 
     def get(self, request, *args, **kwargs):
         try:
@@ -129,7 +123,7 @@ def upload_file(request, pk):
         Decks.objects.get(pk=pk)
     except ObjectDoesNotExist:
         messages.error(request, 'Невозможно добавить карточки в несуществующую колоду')
-        return redirect('/')
+        return redirect('decks:decks')
     else:
         if request.method == 'POST':
             form = UploadFileForm(request.POST, request.FILES)
@@ -154,7 +148,7 @@ def upload_file(request, pk):
                             style=style,
                             deck=deck,
                             created_by=user,
-                            random_num = randint(1, 2000)
+                            random_num=randint(1, 2000)
                         )
                     messages.success(request, 'Карточки были успешно импортированы')
                 return redirect(reverse_lazy('decks:cards', kwargs={'pk': pk}))
@@ -168,6 +162,17 @@ def upload_file(request, pk):
                 'text_button': 'Импортировать'
             }
         )
+
+
+def download_file(request, pk):
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="cards.csv"'
+    writer = csv.writer(response)
+    cards = Cards.objects.filter(deck=pk)
+    for card in cards:
+        writer.writerow([card.question, card.answer])
+    return response
+
 
 
 def check_answer(request, quality, card_id):
@@ -205,7 +210,6 @@ def check_answer(request, quality, card_id):
 
 class ListCardsDayView(LoginRequiredMixin,
                        ListView):
-    # paginate_by = 1
     template_name = 'cards/cards_learn.html'
     context_object_name = 'card'
     model = Cards
@@ -305,9 +309,8 @@ class DeleteAllCardsView(DeleteView):
 
     def get_object(self, queryset=None):
         pk = self.kwargs.get(self.pk_url_kwarg)
-        if pk is not None:
-            deck = Decks.objects.get(id=pk)
-            queryset = self.model._default_manager.filter(deck=deck)
+        deck = Decks.objects.get(id=pk)
+        queryset = self.model._default_manager.filter(deck=deck)
         return queryset
 
     def get(self, request, *args, **kwargs):
