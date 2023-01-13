@@ -165,7 +165,7 @@ def upload_file(request, pk):
             }
         )
 
-
+@login_required
 def download_file(request, pk):
     response = HttpResponse(content_type='text/csv')
     response['Content-Disposition'] = 'attachment; filename="cards.csv"'
@@ -217,10 +217,13 @@ class ListCardsDayView(LoginRequiredMixin,
 
     def get_queryset(self):
         queryset = self.model._default_manager.filter(deck=self.kwargs['pk'])
-        queryset = queryset.filter(Q(review_date__isnull=True) | Q(review_date__lte=date.today()))
+        queryset = queryset.filter(
+            Q(review_date__isnull=True) | Q(review_date__lte=date.today())
+        ).values('id', 'question', 'question_type', 'style')
         if queryset:
             return queryset[0]
         return queryset
+
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -231,25 +234,54 @@ class ListCardsDayView(LoginRequiredMixin,
         return context
 
 
+# def show_answer(request, card_id):
+#     try:
+#         card = Cards.objects.get(id=card_id)
+#     except ObjectDoesNotExist:
+#         messages.error(request, 'Такой карточки нет')
+#         return redirect('/')
+#     else:
+#         deck = Decks.objects.get(id=card.deck.id)
+#         queryset = Cards.objects.filter(deck=deck)
+#         queryset = queryset.filter(
+#             Q(review_date__isnull=True) | Q(review_date__lte=date.today())
+#         ).values('id', 'answer', 'answer_type')
+#         count = queryset.aggregate(count=Count('question'))
+#         if request.POST.get('answer'):
+#             return render(
+#                 request,
+#                 'cards/cards_answer.html',
+#                 context={
+#                     'card': card,
+#                     'count': count,
+#                     'answer': request.POST.get('answer')
+#                 }
+#             )
+#         else:
+#             return render(
+#                 request,
+#                 'cards/cards_answer.html',
+#                 context={
+#                     'card': card,
+#                     'count': count
+#                 }
+#             )
+
 def show_answer(request, card_id):
     try:
-        Cards.objects.get(id=card_id)
+        card = Cards.objects.filter(id=card_id).values('id', 'question', 'question_type', 'answer', 'answer_type')[0]
+        print(card)
     except ObjectDoesNotExist:
         messages.error(request, 'Такой карточки нет')
         return redirect('/')
     else:
-        card = Cards.objects.get(id=card_id)
-        deck = Decks.objects.get(id=card.deck.id)
-        queryset = Cards.objects.filter(deck=deck)
-        queryset = queryset.filter(Q(review_date__isnull=True) | Q(review_date__lte=date.today()))
-        count = queryset.aggregate(count=Count('question'))
+        # если ответ нужно было ввести вручную
         if request.POST.get('answer'):
             return render(
                 request,
                 'cards/cards_answer.html',
                 context={
                     'card': card,
-                    'count': count,
                     'answer': request.POST.get('answer')
                 }
             )
@@ -259,7 +291,6 @@ def show_answer(request, card_id):
                 'cards/cards_answer.html',
                 context={
                     'card': card,
-                    'count': count
                 }
             )
 
@@ -289,6 +320,7 @@ class DeleteSelectCardsView(DeleteView):
         context['text_button'] = 'Удалить'
         context['deck'] = Decks.objects.get(id=self.kwargs['pk'])
         return context
+
 
 def delete_select_cards(request, pk):
     selected = request.POST.getlist('select')
