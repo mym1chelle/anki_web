@@ -27,7 +27,7 @@
                     <a href="{% url 'cards:show_card' pk=card.id %}">{{ card.question | truncatechars:19 }}</a>
                 </td>
                 <td>
-                    {{ card.style }}
+                    {{ card.style__name }}
                 </td>
                 <td>
                     {{ card.created_at | date:"Y-m-d" }}
@@ -44,7 +44,6 @@
             </div>
             <div class="col"></div>
               <div class="col">
-                    <text class="mr-2">Карточек в колоде: {{ count.count }}</text>
                     <a class="btn btn-primary mb-2" href="{% url 'decks:download' pk=deck_id%}">Скачать</a>
                 </div>
           </div>

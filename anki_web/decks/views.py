@@ -13,6 +13,10 @@ class ListDecksView(ListView):
     template_name = 'decks/decks.html'
     context_object_name = 'decks'
 
+    def get_queryset(self):
+        queryset = self.model._default_manager.values('id', 'name').annotate(count=Count('cards'))
+        return queryset
+
 
 class CreateDeckView(SuccessMessageMixin, CreateView):
     model = Decks

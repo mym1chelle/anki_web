@@ -34,13 +34,14 @@ class ListCardsView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         ordering = self.get_ordering()
-        queryset = self.model._default_manager.filter(deck=self.kwargs['pk']).order_by(*ordering)
+        queryset = self.model._default_manager.filter(
+            deck=self.kwargs['pk']
+        ).select_related('style').values('id', 'question', 'created_at', 'review_date', 'style__name').order_by(*ordering)
         return queryset
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['deck_id'] = self.kwargs['pk']
-        context['count'] = self.model.objects.filter(deck=self.kwargs['pk']).aggregate(count=Count('question'))
         return context
 
 

@@ -5,6 +5,7 @@
       <thead>
         <tr>
             <th>Название</th>
+            <th>Кол-во</th>
             <th></th>
             <th></th>
             <th></th>
@@ -15,6 +16,9 @@
             <tr>
                 <td>
                     <a href="{% url 'decks:cards' pk=deck.id %}">{{ deck.name }}</a>
+                </td>
+                <td>
+                    {{ deck.count }}
                 </td>
                 <td>
                     <a href="{% url 'decks:create_card' pk=deck.id %}">Добавить карточку</a>

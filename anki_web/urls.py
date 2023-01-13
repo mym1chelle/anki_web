@@ -16,8 +16,14 @@ urlpatterns = [
     path('logout', LogoutView.as_view(next_page='main_page'), name='logout'),
     path('users/', include('anki_web.users.urls')),
     path('decks/', include('anki_web.decks.urls')),
-    path('cards/', include('anki_web.cards.urls'))
+    path('cards/', include('anki_web.cards.urls')),
 ]
 
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+
+if settings.DEBUG:
+    import debug_toolbar
+    urlpatterns = [
+        path('__debug__/', include(debug_toolbar.urls)),
+    ] + urlpatterns
