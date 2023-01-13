@@ -4,13 +4,11 @@ from django.contrib.auth.views import LogoutView
 from anki_web import views
 from django.conf.urls.static import static
 from django.conf import settings
-from anki_web.cards.views import CardsListAPIView, DetailCardAPIView, CreateCardAPIView
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/v1/cards/<int:id>/', DetailCardAPIView.as_view()),
-    path('api/v1/cards/', CardsListAPIView.as_view()),
-    path('api/v1/create/', CreateCardAPIView.as_view()),
+    path('api/v1/', include('anki_web.anki_api.urls')),
     path('', views.MainPageView.as_view(), name='main_page'),
     path('login/', views.LoginUserView.as_view(next_page='main_page'), name='login'),
     path('logout', LogoutView.as_view(next_page='main_page'), name='logout'),

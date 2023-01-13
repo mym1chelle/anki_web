@@ -54,7 +54,8 @@ INSTALLED_APPS = [
     'anki_web.users',
     'anki_web.decks',
     'anki_web.cards',
-    'anki_web.styles'
+    'anki_web.styles',
+    'anki_web.anki_api'
 ]
 
 MIDDLEWARE = [

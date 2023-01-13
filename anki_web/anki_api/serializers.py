@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Cards
+from anki_web.cards.models import Cards
 
 
 class CardsListSerializer(serializers.ModelSerializer):
