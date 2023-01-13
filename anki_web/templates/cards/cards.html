@@ -4,6 +4,9 @@
 {% load static %}
 {% bootstrap_css %}
 {% bootstrap_javascript jquery='full' %}
+{% block title %}
+    {{ title }}
+{% endblock %}
 {% block content %}
     <table class="table table-striped">
       <thead>

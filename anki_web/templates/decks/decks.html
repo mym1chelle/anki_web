@@ -1,4 +1,7 @@
 {% extends 'base.html' %}
+{% block title %}
+    {{ title }}
+{% endblock %}
 {% block content %}
     <a class="nav-link" href="{% url 'decks:create' %}">Создать колоду</a>
     <table class="table table-striped">
@@ -15,7 +18,11 @@
         {% for deck in decks %}
             <tr>
                 <td>
-                    <a href="{% url 'decks:cards' pk=deck.id %}">{{ deck.name }}</a>
+                    {% if deck.count == 0 %}
+                        {{ deck.name }}
+                    {% else %}
+                        <a href="{% url 'decks:cards' pk=deck.id %}">{{ deck.name }}</a>
+                    {% endif %}
                 </td>
                 <td>
                     {{ deck.count }}

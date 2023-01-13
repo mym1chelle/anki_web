@@ -17,6 +17,11 @@ class ListDecksView(ListView):
         queryset = self.model._default_manager.values('id', 'name').annotate(count=Count('cards'))
         return queryset
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Колоды'
+        return context
+
 
 class CreateDeckView(SuccessMessageMixin, CreateView):
     model = Decks

@@ -42,6 +42,7 @@ class ListCardsView(LoginRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['deck_id'] = self.kwargs['pk']
+        context['title'] = 'Все карточки'
         return context
 
 
@@ -216,14 +217,13 @@ class ListCardsDayView(LoginRequiredMixin,
     model = Cards
 
     def get_queryset(self):
-        queryset = self.model._default_manager.filter(deck=self.kwargs['pk'])
-        queryset = queryset.filter(
+        queryset = self.model._default_manager.filter(
             Q(review_date__isnull=True) | Q(review_date__lte=date.today())
-        ).values('id', 'question', 'question_type', 'style')
+        ).filter(
+            deck=self.kwargs['pk']).values('id', 'question', 'question_type', 'style')
         if queryset:
             return queryset[0]
         return queryset
-
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -269,8 +269,7 @@ class ListCardsDayView(LoginRequiredMixin,
 
 def show_answer(request, card_id):
     try:
-        card = Cards.objects.filter(id=card_id).values('id', 'question', 'question_type', 'answer', 'answer_type')[0]
-        print(card)
+        card = Cards.objects.filter(id=card_id).values('id', 'question', 'question_type', 'answer', 'answer_type', 'deck')[0]
     except ObjectDoesNotExist:
         messages.error(request, 'Такой карточки нет')
         return redirect('/')
