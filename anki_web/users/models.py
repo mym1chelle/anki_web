@@ -11,4 +11,4 @@ class Users(AbstractUser):
         verbose_name_plural = USERS_MODEL_VN_PLURAL
 
     def __str__(self):
-        return self.get_full_name()
+        return self.username

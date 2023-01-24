@@ -3,7 +3,9 @@
 {% block content %}
   <form method="post">
     {% csrf_token %}
-      {% if object.question %}
+      {% if object.name %}
+        <p>Вы действительно хотите удалить колоду {{ object.name }}?</p>
+      {% elif object.question %}
         <p>Вы действительно хотите удалить {{ object.question }}?</p>
       {% else %}
         <p>Вы действительно хотите удалить все записи из колоды {{ deck }}?</p>

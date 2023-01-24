@@ -230,39 +230,6 @@ class ListCardsDayView(LoginRequiredMixin,
         return context
 
 
-# def show_answer(request, card_id):
-#     try:
-#         card = Cards.objects.get(id=card_id)
-#     except ObjectDoesNotExist:
-#         messages.error(request, 'Такой карточки нет')
-#         return redirect('/')
-#     else:
-#         deck = Decks.objects.get(id=card.deck.id)
-#         queryset = Cards.objects.filter(deck=deck)
-#         queryset = queryset.filter(
-#             Q(review_date__isnull=True) | Q(review_date__lte=date.today())
-#         ).values('id', 'answer', 'answer_type')
-#         count = queryset.aggregate(count=Count('question'))
-#         if request.POST.get('answer'):
-#             return render(
-#                 request,
-#                 'cards/cards_answer.html',
-#                 context={
-#                     'card': card,
-#                     'count': count,
-#                     'answer': request.POST.get('answer')
-#                 }
-#             )
-#         else:
-#             return render(
-#                 request,
-#                 'cards/cards_answer.html',
-#                 context={
-#                     'card': card,
-#                     'count': count
-#                 }
-#             )
-
 def show_answer(request, card_id):
     try:
         card = Cards.objects.filter(id=card_id).values('id', 'question', 'question_type', 'answer', 'answer_type', 'deck')[0]
@@ -288,33 +255,6 @@ def show_answer(request, card_id):
                     'card': card,
                 }
             )
-
-
-class DeleteSelectCardsView(DeleteView):
-    template_name = 'delete.html'
-    model = Cards
-    success_url = reverse_lazy('decks:decks')
-    success_message = 'Карточки успешно удаленыs'
-
-    def get_object(self, queryset=None):
-        pk = self.kwargs.get(self.pk_url_kwarg)
-        if pk is not None:
-            deck = Decks.objects.get(id=pk)
-            queryset = self.model._default_manager.filter(deck=deck)
-        return queryset
-
-    def get(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        if not self.object:
-            messages.info(self.request, 'Колода пустая')
-            return redirect('decks:decks')
-        return super().get(self, request, *args, **kwargs)
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['text_button'] = 'Удалить'
-        context['deck'] = Decks.objects.get(id=self.kwargs['pk'])
-        return context
 
 
 def delete_select_cards(request, pk):

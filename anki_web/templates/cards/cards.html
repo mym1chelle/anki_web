@@ -24,7 +24,7 @@
             {% for card in cards %}
             <tr>
                 <td>
-                    <input type="checkbox" name="select" value="{{ card.pk }}">
+                    <input type="checkbox" name="select" value="{{ card.id }}">
                 </td>
                 <td>
                     <a href="{% url 'cards:show_card' pk=card.id %}">{{ card.question | truncatechars:19 }}</a>

@@ -1,7 +1,7 @@
 from django.views.generic import ListView
 from django.contrib.auth.views import LoginView
 from datetime import date
-from django.db.models import Count
+from django.db.models import Count, Q
 from anki_web.decks.models import Decks
 
 
@@ -11,13 +11,14 @@ class MainPageView(ListView):
     context_object_name = 'decks'
 
     def get_queryset(self):
-        decks = self.model._default_manager.all()
-        queryset = [{
-                'id': deck.id,
-                'name': deck.name,
-                'new_cards': deck.cards_set.filter(review_date__isnull=True).aggregate(count=Count('question')),
-                'old_cards': deck.cards_set.filter(review_date__lte=date.today()).aggregate(count=Count('question'))
-        } for deck in decks if deck.cards_set.all()]
+        new = Count('cards', filter=Q(cards__review_date__isnull=True))
+        old = Count('cards', filter=Q(cards__review_date__lte=date.today()))
+        cards = Count('cards')
+        queryset = self.model._default_manager.filter(
+            created_by=self.request.user.id
+        ).values(
+            'id', 'name'
+        ).annotate(new_cards=new).annotate(old_cards=old).annotate(all_cards=cards).filter(all_cards__gt=0)
         return queryset
 
 

@@ -14,7 +14,9 @@ class ListDecksView(ListView):
     context_object_name = 'decks'
 
     def get_queryset(self):
-        queryset = self.model._default_manager.values('id', 'name').annotate(count=Count('cards'))
+        queryset = self.model._default_manager.filter(
+            created_by=self.request.user.id
+        ).values('id', 'name').annotate(count=Count('cards'))
         return queryset
 
     def get_context_data(self, **kwargs):
@@ -47,5 +49,5 @@ class DeleteDeckView(SuccessMessageMixin, CheckConnectMixin, DeleteView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['text_button'] = 'Удалить все'
+        context['text_button'] = 'Удалить'
         return context
