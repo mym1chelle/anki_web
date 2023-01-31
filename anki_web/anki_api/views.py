@@ -88,6 +88,10 @@ class StyleListAPIView(APIView):
         serializer = StyleListSerializer(styles, many=True)
         return Response(serializer.data)
 
+    permission_classes = [
+        IsAuthenticated,
+    ]
+
 
 class CreateCardAPIView(APIView):
     """Создание карточки"""
@@ -151,9 +155,9 @@ class CardsStudyListView(generics.ListCreateAPIView):
     ]
 
 
-class StudyMainView(generics.ListCreateAPIView):
+class StudyMainView(generics.ListAPIView):
     """Выводит список всех колод,
-    где у карточек не заданада дата повторения или дата повторения меньше либо равна текущей дате
+    где у карточек не задана дата повторения или дата повторения меньше либо равна текущей дате
     """
     def get_queryset(self):
         new = Count('cards', filter=Q(cards__review_date__isnull=True))
@@ -166,3 +170,7 @@ class StudyMainView(generics.ListCreateAPIView):
         ).annotate(new_cards=new).annotate(old_cards=old).annotate(all_cards=cards).filter(all_cards__gt=0)
         return queryset
     serializer_class = DeckStudyListSerializer
+
+    permission_classes = [
+        IsAuthenticated,
+    ]
