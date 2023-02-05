@@ -36,7 +36,7 @@
                             </p>
                     {% endif %}
                     {% if card.style == 2 %}
-                    <div class="form-group">
+                    <div class="form-group text-center">
                         <form action="{% url 'decks:answer' card_id=card.id %}" method="post">
                             {% csrf_token %}
                             <textarea class="form-control" name="answer"></textarea>

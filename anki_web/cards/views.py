@@ -19,6 +19,7 @@ import io
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q, Count
 from random import randint
+import difflib
 
 
 class ListCardsView(LoginRequiredMixin, ListView):
@@ -139,7 +140,7 @@ def upload_file(request, pk):
                     for row in read:
                         question = row[0]
                         answer = row[1]
-                        Cards.objects.create(
+                        Cards.objects.     create(
                             question=question,
                             question_type=question_type,
                             answer=answer,
@@ -173,22 +174,23 @@ def download_file(request, pk):
     return response
 
 
-def check_answer(request, quality, card_id):
+def check_answer(request, card_id):
     try:
         Cards.objects.get(id=card_id)
     except ObjectDoesNotExist:
         messages.error(request, 'Такой карточки нет')
         return redirect('/')
     else:
-        if quality not in [1, 2, 3, 4, 5]:
-            messages.error(request, 'Нет такой категории ответа')
-            return redirect('/')
-        else:
-            if request.method == 'POST':
+        if request.method == 'POST':
+            quality = int(request.POST.get('quality'))
+            if quality not in [1, 2, 3, 4, 5]:
+                messages.error(request, 'Нет такой категории ответа')
+                return redirect('/')
+            else:
                 card = Cards.objects.get(id=card_id)
                 if card.review_date:
                     # изменил код в SMTwo: была ошибка, из-за того что карточки не повторялись в заданный день
-                    # добавил условие, что если дата повторения карточки не равна сегодняшней дате, то она изменияется
+                    # добавил условие, что если дата повторения карточки не равна сегодняшней дате, то она изменяется
                     # на сегодняшнюю
                     review = SMTwo(
                         card.easiness,
@@ -223,9 +225,9 @@ class ListCardsDayView(LoginRequiredMixin,
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        queryset = Cards.objects.filter(deck=self.kwargs['pk'])
+        queryset = Cards.objects.filter(deck=self.kwargs['pk']).values('id')
         queryset = queryset.filter(Q(review_date__isnull=True) | Q(review_date__lte=date.today()))
-        count = queryset.aggregate(count=Count('question'))
+        count = queryset.aggregate(count=Count('id'))
         context['count'] = count
         return context
 
@@ -239,12 +241,24 @@ def show_answer(request, card_id):
     else:
         # если ответ нужно было ввести вручную
         if request.POST.get('answer'):
+            pattern = card['answer']
+            entered_word = request.POST.get('answer')
+            diff = difflib.ndiff(pattern, entered_word)
+            equals_answers = []
+            for i in diff:
+                if i[0] == '+':
+                   equals_answers.append((i[-1], 'text-secondary'))
+                if i[0] == '-':
+                    equals_answers.append((i[-1], 'text-danger'))
+                if i[0] == ' ':
+                    equals_answers.append((i[-1],'text-success'))
             return render(
                 request,
                 'cards/cards_answer.html',
                 context={
                     'card': card,
-                    'answer': request.POST.get('answer')
+                    'answer': entered_word,
+                    'equals_answers': equals_answers
                 }
             )
         else:
