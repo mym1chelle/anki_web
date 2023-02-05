@@ -140,7 +140,7 @@ def upload_file(request, pk):
                     for row in read:
                         question = row[0]
                         answer = row[1]
-                        Cards.objects.     create(
+                        Cards.objects.create(
                             question=question,
                             question_type=question_type,
                             answer=answer,
