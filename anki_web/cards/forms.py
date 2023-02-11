@@ -17,19 +17,27 @@ class CreateCardForm(forms.ModelForm):
 
 class UploadFileForm(forms.Form):
     TYPES = [
-        ('md', 'Markdown'),
         ('text', 'Text'),
+        ('md', 'Markdown'),
         ('html', 'HTML')
     ]
 
     question_type = forms.ChoiceField(
         choices=TYPES,
-        widget=forms.Select
+        widget=forms.Select,
+        label='Тип вопроса',
     )
     answer_type = forms.ChoiceField(
         choices=TYPES,
-        widget=forms.Select
+        widget=forms.Select,
+        label='Тип ответа'
     )
 
-    card_style = forms.ModelChoiceField(queryset=Styles.objects.all(), required=True)
-    file = forms.FileField()
+    card_style = forms.ModelChoiceField(
+        queryset=Styles.objects.all(),
+        required=True,
+        label='Стиль карточки'
+    )
+    file = forms.FileField(
+        label='Файл'
+    )

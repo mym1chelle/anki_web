@@ -42,6 +42,9 @@
                     {% endif %}
                 </tr>
             {% endfor %}
+            {% else %}
+                <p>Чтобы пользовать приложение <a href="{% url 'create' %}">зарегистрируйтесь</a> или <a href="{% url 'login' %}">авторизируйтесь</a>
+                </p>
         {% endif %}
       </tbody>
     </table>

@@ -15,11 +15,25 @@ class Cards(models.Model):
         ('html', 'HTML')
     ]
 
-    question = models.TextField(null=False)
-    question_type = models.CharField(default='text', max_length=10, choices=TYPES)
-    answer = models.TextField(null=False)
-    answer_type = models.CharField(default='text', max_length=10, choices=TYPES)
-    style = models.ForeignKey(Styles, on_delete=models.PROTECT)
+    question = models.TextField(null=False, verbose_name='Вопрос')
+    question_type = models.CharField(
+        default='text',
+        max_length=10,
+        choices=TYPES,
+        verbose_name='Тип вопроса'
+    )
+    answer = models.TextField(null=False, verbose_name='Ответ')
+    answer_type = models.CharField(
+        default='text',
+        max_length=10,
+        choices=TYPES,
+        verbose_name='Тип ответа'
+    )
+    style = models.ForeignKey(
+        Styles,
+        on_delete=models.PROTECT,
+        verbose_name='Стиль карточки'
+    )
     deck = models.ForeignKey(Decks, on_delete=models.PROTECT)
     created_by = models.ForeignKey(Users, on_delete=models.PROTECT)
     created_at = models.DateTimeField(auto_now_add=True)
