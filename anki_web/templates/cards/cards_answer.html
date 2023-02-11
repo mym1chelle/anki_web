@@ -49,14 +49,14 @@
                             </p>
                         {% endif %}
                     <div class="row">
-                        <div class="col-sm-10 offset-sm-1 text-center">
+                        <div class="col-12 col-sm-10 offset-sm-1 text-center">
                             <form class="form-inline justify-content-center" action="{% url 'cards:answer' card_id=card.id%}" method="post">
                                 {% csrf_token %}
                                 <button class="btn btn-outline-danger" value="5" name="quality">Очень сложно</button>
-                                <button class="btn btn-outline-dark ml-5" value="4" name="quality">Сложно</button>
-                                <button class="btn btn-outline-warning ml-5" value="3" name="quality">Норм</button>
-                                <button class="btn btn-outline-primary ml-5" value="2" name="quality">Легко</button>
-                                <button class="btn btn-outline-success ml-5" value="1" name="quality">Очень легко</button>
+                                <button class="btn btn-outline-dark ml-2" value="4" name="quality">Сложно</button>
+                                <button class="btn btn-outline-warning ml-2" value="3" name="quality">Норм</button>
+                                <button class="btn btn-outline-primary ml-2" value="2" name="quality">Легко</button>
+                                <button class="btn btn-outline-success ml-2" value="1" name="quality">Очень легко</button>
                             </form>
                         </div>
                     </div>

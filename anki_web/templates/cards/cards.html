@@ -8,7 +8,7 @@
     {{ title }}
 {% endblock %}
 {% block content %}
-    <table class="table table-striped">
+<table class="table table-striped" xmlns="http://www.w3.org/1999/html">
       <thead>
         <tr>
             <th></th>
@@ -42,8 +42,8 @@
         {% endfor %}
           <div class="row row-col-3">
             <div class="col">
-                <input class="btn btn-danger mb-2 mr-2" type="submit" onclick="delete_confirm(event)"value="Удалить">
-                <a class="btn btn-danger mb-2 mr-2" href="{% url 'decks:delete_all' pk=deck_id%}">Удалить все карточки</a>
+                    <input class="btn btn-danger mb-2 mr-2" type="submit" onclick="delete_confirm(event)"value="Удалить">
+                <a class="btn btn-danger mb-2 mr-2" href="{% url 'decks:delete_all' pk=deck_id%}">Удалить все</a>
             </div>
             <div class="col"></div>
               <div class="col">
