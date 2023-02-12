@@ -4,7 +4,7 @@ from tkinter import messagebox
 from create_new_cards import CardsCreater
 from create_new_deck import DeckCreater
 from study_cards import CardsForStudy
-from pydantic_models import Login, Registration
+from pydantic_schemas import Login, Registration
 from utils import MAIN_URL_API
 
 

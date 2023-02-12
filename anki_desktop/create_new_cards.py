@@ -2,7 +2,7 @@ import tkinter as tk
 import requests
 from tkinter import messagebox
 from utils import get_type_code, load_and_import_file, take_window_of_center, MAIN_URL_API, search_styles, search_deck
-from pydantic_models import Decks, Styles
+from pydantic_schemas import Decks, Styles
 
 
 class CardsCreater:
