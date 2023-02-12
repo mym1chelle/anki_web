@@ -1,2 +1,2 @@
 # anki_web
-Web version of the Anki application
+Web and desktop versions of the Anki application
