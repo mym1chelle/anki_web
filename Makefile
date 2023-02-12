@@ -6,3 +6,6 @@ makemigrations:
 
 migrate:
 	poetry run python manage.py migrate
+
+run:
+	poetry run python anki_desktop/main.py
