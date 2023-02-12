@@ -1,6 +1,12 @@
-FROM python:3.11.0
+FROM python:3.11.1
 
-COPY . /.
+COPY anki_web /anki_web
+COPY static /static
+COPY manage.py /.
+COPY pyproject.toml /.
+COPY poetry.lock /.
+COPY README.md /.
+
 WORKDIR /.
 EXPOSE 8000
 

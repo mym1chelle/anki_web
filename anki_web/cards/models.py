@@ -10,8 +10,8 @@ class Cards(models.Model):
         ordering = ['random_num']
 
     TYPES = [
-        ('md', 'Markdown'),
         ('text', 'Text'),
+        ('md', 'Markdown'),
         ('html', 'HTML')
     ]
 

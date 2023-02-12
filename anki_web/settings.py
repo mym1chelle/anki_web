@@ -103,7 +103,7 @@ WSGI_APPLICATION = 'anki_web.wsgi.application'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 DATABASES = {
-    'default': dj_database_url.parse(os.getenv('DATABASE_URL')),
+    'default': dj_database_url.parse(os.getenv('DATABASE_URL_')),
 }
 
 AUTH_USER_MODEL = "users.Users"

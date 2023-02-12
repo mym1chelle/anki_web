@@ -29,6 +29,7 @@ class DetailCardSerializer(serializers.ModelSerializer):
         ]
 
 
+
 class CreateCardSerializer(serializers.ModelSerializer):
     class Meta:
         model = Cards
@@ -39,8 +40,6 @@ class CreateCardSerializer(serializers.ModelSerializer):
             'answer_type',
             'style',
             'deck',
-            'created_by',
-            'random_num'
         ]
 
 

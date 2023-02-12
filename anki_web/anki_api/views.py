@@ -1,4 +1,4 @@
-from rest_framework import generics
+from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
@@ -74,7 +74,7 @@ class DecksListAPIView(APIView):
     def get(self, request, *args, **kwargs):
         decks = Decks._default_manager.filter(created_by=request.user.id)
         serializer = DeckListSerializer(decks, many=True)
-        return Response(serializer.data)
+        return Response({'decks': serializer.data})
 
     permission_classes = [
         IsAuthenticated,
@@ -86,38 +86,31 @@ class StyleListAPIView(APIView):
     def get(self, request, *args, **kwargs):
         styles = Styles._default_manager.all()
         serializer = StyleListSerializer(styles, many=True)
-        return Response(serializer.data)
+        return Response({'styles': serializer.data})
 
     permission_classes = [
         IsAuthenticated,
     ]
 
 
-class CreateCardAPIView(APIView):
+class CreateCardAPIView(generics.CreateAPIView):
     """Создание карточки"""
+    serializer_class = CreateCardSerializer
     permission_classes = [
         IsAuthenticated,
     ]
 
-    def post(self, request, *args, **kwargs):
-        print(request.data['question'])
-        card = CreateCardSerializer(
-            data={
-                'question': request.data['question'],
-                'question_type': request.data['question_type'],
-                'answer': request.data['answer'],
-                'answer_type': request.data['answer_type'],
-                'style': request.data['style'],
-                'deck': request.data['deck'],
-                'created_by': request.user.id,
-                'random_num': randint(1, 2000)
-            }
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(
+            data=request.data
         )
-        if card.is_valid():
-            card.save()
-            return Response(status=201)
-        else:
-            return Response(status=424)
+        serializer.is_valid(raise_exception=True)
+        serializer.save(
+            created_by=request.user,
+            random_num=randint(1, 2000)
+        )
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
 
 class CreateDeckAPIView(APIView):

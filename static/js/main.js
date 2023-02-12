@@ -6,3 +6,5 @@ function delete_confirm(e) {
             e.preventDefault();
         }
     };
+
+
