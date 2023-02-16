@@ -1,2 +1,8 @@
-# anki_web
-Web and desktop versions of the Anki application
+# Anki
+Моя реализация приложения для интервального повторения [Anki](https://apps.ankiweb.net).
+
+## Anki_web
+Веб-приложение
+
+## Anki_desktop
+Десктопное приложение, разработанное с помощью библиотеки Tkinter

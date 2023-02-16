@@ -7,7 +7,7 @@ readme = "README.md"
 packages = [{include = "anki_web"}]
 
 [tool.poetry.dependencies]
-python = "^3.11.1"
+python = "3.11.1"
 django = "^4.1.4"
 dj-database-url = "^1.2.0"
 django-bootstrap4 = "^22.3"
@@ -19,12 +19,12 @@ djangorestframework = "^3.14.0"
 djoser = "^2.1.0"
 drf-yasg = "^1.21.4"
 django-filter = "^22.1"
+customtkinter = "^5.1.2"
 
 [tool.poetry.group.desk.dependencies]
 requests = "^2.28.2"
 tksheet = "^5.4.1"
 tkhtmlview = "^0.1.1.post5"
-ttkbootstrap = "^1.10.1"
 pydantic = "^1.10.4"
 
 
@@ -32,6 +32,8 @@ pydantic = "^1.10.4"
 flake8 = "^6.0.0"
 coverage = "^7.0.1"
 django-debug-toolbar = "^3.8.1"
+pyinstaller = "^5.8.0"
+py2app = "^0.28.5"
 
 [build-system]
 requires = ["poetry-core"]

@@ -1,20 +1,28 @@
 import csv
 import tkinter as tk
+import customtkinter as ct
 from tkinter import filedialog, messagebox
 import requests
+from pydantic_schemas import Decks, Styles
 
+
+win_width = 700
+win_height = 800
 
 root = tk.Tk()
+# root = ct.CTk()
 
 
 MAIN_URL_API = 'http://127.0.0.1:8000/api/v1/'
+BG_COLOR = '#323232'
+TEXT_COLOR = 'white'
 
 
-def search_deck(name, decks):
-    return next((deck.id for deck in decks.decks if deck.name == name), None)
+def search_deck(name, decks: Decks):
+    return next((deck.id for deck in decks.results if deck.name == name), None)
 
 
-def search_styles(name, styles):
+def search_styles(name, styles: Styles):
     return next((style.id for style in styles.styles if style.name == name), None)
 
 
@@ -39,10 +47,15 @@ def load_and_import_file(
         new_window: tk.Toplevel,
         question_type_code: str,
         answer_type_code: str,
-        card_style_id: int,
-        deck_id: int,
-        token: str
+        card_style: str,
+        styles: Styles,
+        deck_name: str,
+        decks: Decks,
+        token: str,
+        study
 ):
+    deck_id = search_deck(deck_name, decks)
+    style_id = search_styles(card_style, styles)
     window.filename = filedialog.askopenfilename(
         initialdir='/Users/timursamusenko/Downloads/',
         title='Выберите файл',
@@ -55,40 +68,23 @@ def load_and_import_file(
             yes_no = messagebox.askyesnocancel(message=f'Импортировать карточки ({cards_count_in_file})?')
             if yes_no:
                 for row in read:
-                    try:
-                        requests.post(
-                            url=f"f{MAIN_URL_API}cards/create/",
-                            data={
-                                "question": row[0],
-                                "question_type": question_type_code,
-                                "answer": row[1],
-                                "answer_type": answer_type_code,
-                                "style": card_style_id,
-                                "deck": deck_id
-                            },
-                            headers={
-                                'Authorization': f'Token {token}'
-                            }
-                        )
-                    except:
-                        messagebox.showerror(message='Неудалось подключиться к серверу')
+                    # try:
+                    requests.post(
+                        url=f"{MAIN_URL_API}cards/create/",
+                        data={
+                            "question": row[0],
+                            "question_type": question_type_code,
+                            "answer": row[1],
+                            "answer_type": answer_type_code,
+                            "style": style_id,
+                            "deck": deck_id
+                        },
+                        headers={
+                            'Authorization': f'Token {token}'
+                        }
+                    )
+                    # except:
+                    #     messagebox.showerror(message='Неудалось подключиться к серверу')
                 messagebox.showinfo(message='Карточки были успешно импортированы')
         new_window.destroy()
-
-
-class WrapperMap:
-    """Класса для """
-    def __init__(self, d: dict):
-        self.d = d
-
-    def get_value(self):
-        return self.d
-
-    def __getattr__(self, item: str):
-        value = self.d.get(item)
-        if isinstance(value, dict):
-            return self.__class__(value)
-        return value
-
-    def __repr__(self):
-        return repr(self.d)
+        study.show_decks()
