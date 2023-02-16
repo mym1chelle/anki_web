@@ -4,10 +4,10 @@ from anki_web.anki_api.views import (
     CreateCardAPIView,
     DecksListAPIView,
     StyleListAPIView,
-    CardsStudyListView,
     StudyMainView,
     CreateDeckAPIView,
-    CardAPIUpdate
+    CardAPIShowUpdate,
+    CardsFilterListAPIView
 )
 
 urlpatterns = [
@@ -15,11 +15,11 @@ urlpatterns = [
     path('auth-token/', include('djoser.urls')),
     re_path(r'^auth/', include('djoser.urls.authtoken')),
     path('cards/', CardsListAPIView.as_view()),
-    path('styles/', StyleListAPIView.as_view()),
-    path('decks/', DecksListAPIView.as_view()),
-    path('deck/<int:id>/cards', CardsStudyListView.as_view()),
     path('cards/create/', CreateCardAPIView.as_view()),
+    path('cards/<int:pk>/', CardAPIShowUpdate.as_view()),
+    path('decks/', DecksListAPIView.as_view()),
     path('decks/create/', CreateDeckAPIView.as_view()),
-    path('study/', StudyMainView.as_view()),
-    path('cards/<int:pk>/', CardAPIUpdate.as_view())
+    path('decks/<int:id>/cards/', CardsFilterListAPIView.as_view()),
+    path('decks/daily/', StudyMainView.as_view()),
+    path('styles/', StyleListAPIView.as_view())
 ]
