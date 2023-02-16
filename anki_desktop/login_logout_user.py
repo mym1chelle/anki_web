@@ -60,9 +60,9 @@ class LoginLogOutUser:
     def registration(self):
         """Валидация введенных данных и регистрация"""
         if self.login_error:
-            self.login_error.grid_forget()
+            self.login_error.destroy()
         if self.password_error:
-            self.password_error.grid_forget()
+            self.password_error.destroy()
         get_username = self.login.get()
         get_password = self.password.get()
         try:
@@ -75,8 +75,8 @@ class LoginLogOutUser:
             )
             user_data = Registration.parse_obj(registration.json())
             if registration.status_code == 201:
-                messagebox.showinfo(message=f'Пользователь {user_data.username} был успешно зарегестрирован')
                 self.registration_frame.destroy()
+                messagebox.showinfo(message=f'Пользователь {user_data.username} был успешно зарегестрирован')
                 self.login_user()
             else:
                 if user_data.username:

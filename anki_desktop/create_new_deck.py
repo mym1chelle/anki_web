@@ -69,7 +69,7 @@ class DeckCreater:
             self.error_message = tk.Label(
                 self.create_deck_frame, text=deck.name[0], fg='red'
                 )
-            self.error_message.pack()
+            self.error_message.grid(row=2, column=0, columnspan=2)
         else:
             messagebox.showerror(
                 message='При создании колоды произошла ошибка'
