@@ -41,7 +41,7 @@ class LoginLogOutUser:
         username_label = tk.Label(self.registration_frame, text='Логин')
         self.login = ct.CTkEntry(self.registration_frame)
         password_label = tk.Label(self.registration_frame, text='Пароль')
-        self.password = ct.CTkEntry(self.registration_frame)
+        self.password = ct.CTkEntry(self.registration_frame, show='*')
         registration_button = ct.CTkButton(
             self.registration_frame,
             command=self.registration,
@@ -101,7 +101,7 @@ class LoginLogOutUser:
         login_label = tk.Label(self.login_frame, text='Логин')
         self.login = ct.CTkEntry(self.login_frame)
         password_label = tk.Label(self.login_frame, text='Пароль')
-        self.password = ct.CTkEntry(self.login_frame)
+        self.password = ct.CTkEntry(self.login_frame, show='*')
         login_button = ct.CTkButton(
             self.login_frame,
             text='Войти',
