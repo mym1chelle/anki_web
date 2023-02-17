@@ -32,7 +32,6 @@ pydantic = "^1.10.4"
 flake8 = "^6.0.0"
 coverage = "^7.0.1"
 django-debug-toolbar = "^3.8.1"
-pyinstaller = "^5.8.0"
 py2app = "^0.28.5"
 
 [build-system]

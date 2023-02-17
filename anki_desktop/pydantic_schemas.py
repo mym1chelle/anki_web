@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from pydantic import types as t
 import typing
 
 
@@ -56,7 +57,7 @@ class GetCardAnswer(BaseModel):
     easiness: typing.Optional[float]
     interval: typing.Optional[int]
     repetitions: typing.Optional[int]
-    review_date: typing.Optional[str]
+    review_date: t.OptionalDate
 
 
 class CreateDeckResult(BaseModel):

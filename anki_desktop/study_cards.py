@@ -1,4 +1,5 @@
 import tkinter as tk
+from datetime import datetime
 from tkinter import ttk
 import customtkinter as ct
 import requests
@@ -15,20 +16,24 @@ class CardsForStudy:
 
         self.study_card_frame: tk.Frame = None
         self.show_study_decks_frame: tk.Frame = None
-
-        self.show_answer_button: tk.Button = None
+        self.buttons_frame: tk.Frame = None
 
     def hidden_decks_and_cards(self):
+        if self.buttons_frame:
+            self.buttons_frame.destroy()
         if self.show_study_decks_frame:
-            self.show_study_decks_frame.destroy()
+            self.show_study_decks_frame.forget()
         if self.study_card_frame:
-            self.study_card_frame.destroy()
+            self.study_card_frame.forget()
 
     def show_decks(self):
         if self.show_study_decks_frame:
             self.show_study_decks_frame.destroy()
         if self.study_card_frame:
             self.study_card_frame.destroy()
+        if self.buttons_frame:
+            self.buttons_frame.destroy()
+
         study = requests.get(
             url=f'{MAIN_URL_API}decks/daily/',
             headers={
@@ -94,12 +99,13 @@ class CardsForStudy:
                 card_data = card.results[0]
                 cards_count = tk.Label(self.study_card_frame, text=f'Осталось: {count}')
                 cards_count.grid(row=1, column=0, columnspan=5)
-                if card_data.question_type == 'text':
+                if card_data.question_type == 'text' or card_data.question_type == 'md':
                     card_question = ct.CTkTextbox(self.study_card_frame, width=570, fg_color=BG_COLOR)
                     card_question.tag_config("tag_name", justify='center')
                     card_question.insert('1.0', text=card_data.question)
                     card_question.tag_add("tag_name", "1.0", "end")
                     card_question.configure(state='disabled')
+
                 elif card_data.question_type == 'html':
                     card_question = HTMLLabel(
                         self.study_card_frame,
@@ -107,29 +113,35 @@ class CardsForStudy:
                         html=card_data.question,
                     )
                 card_question.grid(row=2, column=0, columnspan=5)
-                self.show_answer_button = tk.Button(
-                        self.study_card_frame,
+                if self.buttons_frame:
+                    self.buttons_frame.forget()
+                self.buttons_frame = tk.Frame(self.window)
+                show_answer_button = tk.Button(
+                        self.buttons_frame,
                         text='Ответ',
                         command=lambda: self.show_answer(answer=card_data.answer, card_id=card_data.id, deck_id=deck_id)
                         )
-                self.show_answer_button.grid(row=3, column=0, columnspan=5)
-                self.study_card_frame.pack()
+                show_answer_button.grid(row=5, column=0, columnspan=5, pady=15)
+                self.buttons_frame.pack(side=tk.BOTTOM)
             else:
                 no_cards = tk.Label(self.study_card_frame, text='На сегодня все')
                 no_cards.grid(row=1, column=0, columnspan=5)
-                self.study_card_frame.pack()
+            self.study_card_frame.pack()
 
     def show_answer(self, answer: str, card_id: int, deck_id: int):
-        self.show_answer_button.grid_forget()
+        self.buttons_frame.forget()
         separator = ttk.Separator(self.study_card_frame, orient=tk.HORIZONTAL)
-        take_answer = ct.CTkTextbox(self.study_card_frame, width=570, fg_color=BG_COLOR)
-        take_answer.tag_config("tag_name", justify='center')
-        take_answer.insert('1.0', answer)
-        take_answer.tag_add("tag_name", "1.0", "end")
-        take_answer.configure(state='disabled')
+        show_answer_textbox = ct.CTkTextbox(self.study_card_frame, width=570, fg_color=BG_COLOR)
+        show_answer_textbox.tag_config("tag_name", justify='center')
+        show_answer_textbox.insert('1.0', answer)
+        show_answer_textbox.tag_add("tag_name", "1.0", "end")
+        show_answer_textbox.configure(state='disabled')
         # take_answer = HTMLLabel(self.study_card_frame, html=f"<p>{answer}</p>")
+
+        self.buttons_frame = tk.Frame(self.window)
+
         button_one = tk.Button(
-            self.study_card_frame, text='Очень сложно',
+            self.buttons_frame, text='Очень сложно',
             fg='red',
             command=lambda: self.change_card(
                 rating=1,
@@ -139,7 +151,7 @@ class CardsForStudy:
             )
         )
         button_two = tk.Button(
-            self.study_card_frame,
+            self.buttons_frame,
             fg='orange',
             text='Сложно',
             command=lambda: self.change_card(
@@ -150,7 +162,7 @@ class CardsForStudy:
             )
         )
         button_three = tk.Button(
-            self.study_card_frame,
+            self.buttons_frame,
             text='Норм',
             command=lambda: self.change_card(
                 rating=3,
@@ -160,7 +172,7 @@ class CardsForStudy:
             )
         )
         button_four = tk.Button(
-            self.study_card_frame,
+            self.buttons_frame,
             fg='blue',
             text='Легко',
             command=lambda: self.change_card(
@@ -171,7 +183,7 @@ class CardsForStudy:
             )
         )
         button_five = tk.Button(
-            self.study_card_frame,
+            self.buttons_frame,
             fg='green',
             text='Очень легко',
             command=lambda: self.change_card(
@@ -181,13 +193,14 @@ class CardsForStudy:
                 deck_id=deck_id
             )
         )
-        separator.grid(row=4, column=0, columnspan=5, ipadx=300, pady=15)
-        take_answer.grid(row=5, column=0, columnspan=5, pady=5)
-        button_one.grid(row=6, column=0)
-        button_two.grid(row=6, column=1)
-        button_three.grid(row=6, column=2)
-        button_four.grid(row=6, column=3)
-        button_five.grid(row=6, column=4)
+        separator.grid(row=3, column=0, columnspan=5, ipadx=300, pady=15)
+        show_answer_textbox.grid(row=4, column=0, columnspan=5, pady=5)
+        button_one.grid(row=5, column=0, pady=15)
+        button_two.grid(row=5, column=1, pady=15)
+        button_three.grid(row=5, column=2, pady=15)
+        button_four.grid(row=5, column=3, pady=15)
+        button_five.grid(row=5, column=4, pady=15)
+        self.buttons_frame.pack(side=tk.BOTTOM)
 
     def change_card(self, rating: int, card_id: int, token: str, deck_id: int):
         get_card = requests.get(

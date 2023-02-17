@@ -136,8 +136,8 @@ class CardsCreater:
 
         question_label.grid(row=0, column=0, columnspan=2)
         self.card_question.grid(row=1, column=0, columnspan=2, sticky="nsew")
-        question_type_label.grid(row=2, column=0)
-        selected_question_type.grid(row=2, column=1, pady=5)
+        question_type_label.grid(row=3, column=0)
+        selected_question_type.grid(row=3, column=1, pady=5)
         answer_label.grid(row=4, column=0, columnspan=2)
         self.card_answer.grid(row=5, column=0, columnspan=2)
         answer_type_label.grid(row=7, column=0)
@@ -199,7 +199,7 @@ class CardsCreater:
                             text=card.question[0], fg='red'
                         )
                         self.card_question_error.grid(
-                            row=3, column=0, columnspan=2)
+                            row=2, column=0, columnspan=2)
                     if card.answer:
                         self.card_answer_error = tk.Label(
                             self.create_card_frame,

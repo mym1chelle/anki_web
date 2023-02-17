@@ -63,6 +63,8 @@ class LoginLogOutUser:
             self.login_error.destroy()
         if self.password_error:
             self.password_error.destroy()
+        if self.past_login_frame:
+            self.past_login_frame.destroy()
         get_username = self.login.get()
         get_password = self.password.get()
         try:
@@ -136,7 +138,7 @@ class LoginLogOutUser:
                 # убираю ненужные элементы аутентификации
                 self.login_frame.destroy()
                 self.token = user_data.auth_token
-                self.past_login_frame = tk.LabelFrame(self.window)
+                self.past_login_frame = tk.Frame(self.window)
 
                 self.study = CardsForStudy(window=self.window, token=self.token)
 
@@ -197,7 +199,7 @@ class LoginLogOutUser:
                     command=lambda: self.study.show_decks()
                 )
                 show_study_decks.grid(row=0, column=3)
-                self.past_login_frame.pack()
+                self.past_login_frame.pack(side=tk.TOP)
                 self.study.show_decks()
             elif user_login.status_code == 400:
                 messagebox.showerror(message=user_data.non_field_errors[0])

@@ -13,7 +13,7 @@ auth_user = tk.Menu(menu)
 settings = tk.Menu(menu)
 login = LoginLogOutUser(root, auth_user)
 menu.add_cascade(label='Authorization', menu=auth_user)
-menu.add_cascade(label='Settings', menu=settings)
+# menu.add_cascade(label='Settings', menu=settings)
 
 auth_user.add_command(label='Log In', command=lambda: login.login_user())
 auth_user.add_command(label='Registration', command=lambda: login.registration_form())
