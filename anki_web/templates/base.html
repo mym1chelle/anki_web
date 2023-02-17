@@ -11,7 +11,7 @@
     <title>Title</title>
 </head>
 <body class="d-flex flex-column min-vh-100">
-<nav class="navbar navbar-expand-lg navbar-light bg-light mb-3">
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-3">
     <a class="navbar-brand" href="{% url 'main_page' %}">Web Anki</a>
     <button class="navbar-toggler" data-toggle="collapse" data-target="#navbarToggleExternalContent">
         <span class="navbar-toggler-icon"></span>
@@ -27,8 +27,11 @@
         </ul>
         <ul class="navbar-nav">
             {% if user.is_authenticated %}
+                <li class="navbar-text text-light">
+                    {{ user.username }}
+                </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'logout' %}">Выйти</a>
+                    <a class="nav-link" href="{% url 'logout' %}"> Выйти</a>
                 </li>
             {% else %}
                 <li class="nav-item">
