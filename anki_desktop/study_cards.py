@@ -124,8 +124,8 @@ class CardsForStudy:
                 show_answer_button.grid(row=5, column=0, columnspan=5, pady=15)
                 self.buttons_frame.pack(side=tk.BOTTOM)
             else:
-                no_cards = tk.Label(self.study_card_frame, text='На сегодня все')
-                no_cards.grid(row=1, column=0, columnspan=5)
+                no_cards = tk.Label(self.study_card_frame, text='На сегодня все', font=(None, 25))
+                no_cards.grid(row=1, column=0, columnspan=5, pady=10)
             self.study_card_frame.pack()
 
     def show_answer(self, answer: str, card_id: int, deck_id: int):
