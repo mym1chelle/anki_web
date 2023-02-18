@@ -18,7 +18,8 @@ class MainPageView(ListView):
             created_by=self.request.user.id
         ).values(
             'id', 'name'
-        ).annotate(new_cards=new).annotate(old_cards=old).annotate(all_cards=cards).filter(all_cards__gt=0)
+        ).annotate(new_cards=new).annotate(old_cards=old).annotate(
+            all_cards=cards).filter(all_cards__gt=0)
         return queryset
 
 
