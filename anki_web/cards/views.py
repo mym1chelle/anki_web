@@ -43,6 +43,19 @@ class ListCardsView(LoginRequiredMixin, ListView):
         return context
 
 
+class AllCardsView(LoginRequiredMixin, ListView):
+    model = Cards
+    template_name = 'cards/cards.html'
+    context_object_name = 'cards'
+    paginate_by = 13
+    ordering = ['-created_at']
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Все карточки'
+        return context
+
+
 class DetailCardView(LoginRequiredMixin, DetailView):
     context_object_name = 'card'
     model = Cards
@@ -164,11 +177,14 @@ def upload_file(request, pk):
         )
 
 @login_required
-def download_file(request, pk):
+def download_file(request, pk=None):
     response = HttpResponse(content_type='text/csv')
     response['Content-Disposition'] = 'attachment; filename="cards.csv"'
     writer = csv.writer(response)
-    cards = Cards.objects.filter(deck=pk)
+    if pk:
+        cards = Cards.objects.filter(deck=pk)
+    else:
+        cards = Cards.objects.filter(created_by=request.user.id)
     for card in cards:
         writer.writerow([card.question, card.answer])
     return response
@@ -271,7 +287,7 @@ def show_answer(request, card_id):
             )
 
 
-def delete_select_cards(request, pk):
+def delete_select_cards(request, pk=None):
     selected = request.POST.getlist('select')
     if selected:
         for select_id in selected:
@@ -280,7 +296,10 @@ def delete_select_cards(request, pk):
         messages.success(request, 'Карточки были успешно удалены')
     else:
         messages.error(request, 'Вы не выбрали ни одной карточки')
-    return redirect(reverse_lazy('decks:cards', kwargs={'pk': pk}))
+    if pk:
+        return redirect(reverse_lazy('decks:cards', kwargs={'pk': pk}))
+    else:
+        return redirect(reverse_lazy('cards:all_cards'))
 
 
 class DeleteAllCardsView(SuccessMessageMixin, DeleteView):
@@ -291,8 +310,11 @@ class DeleteAllCardsView(SuccessMessageMixin, DeleteView):
 
     def get_object(self, queryset=None):
         pk = self.kwargs.get(self.pk_url_kwarg)
-        deck = Decks.objects.get(id=pk)
-        queryset = self.model._default_manager.filter(deck=deck)
+        if pk:
+            deck = Decks.objects.get(id=pk)
+            queryset = self.model._default_manager.filter(deck=deck)
+        else:
+            queryset = self.model._default_manager.filter(created_by=self.request.user.id)
         return queryset
 
     def get(self, request, *args, **kwargs):
@@ -305,5 +327,6 @@ class DeleteAllCardsView(SuccessMessageMixin, DeleteView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['text_button'] = 'Удалить'
-        context['deck'] = Decks.objects.get(id=self.kwargs['pk'])
+        if self.kwargs.get('pk'):
+            context['deck'] = Decks.objects.get(id=self.kwargs['pk'])
         return context

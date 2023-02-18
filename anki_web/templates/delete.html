@@ -7,8 +7,10 @@
         <p>Вы действительно хотите удалить колоду «{{ object.name }}»?</p>
       {% elif object.question %}
         <p>Вы действительно хотите удалить «{{ object.question }}»?</p>
-      {% else %}
+      {% elif deck %}
         <p>Вы действительно хотите удалить все записи из колоды «{{ deck }}»?</p>
+      {% else %}
+        <p>Вы действительно хотите удалить все карточки?</p>
       {% endif %}
       {% bootstrap_button text_button button_type="submit" button_class="btn-danger" %}
   </form>

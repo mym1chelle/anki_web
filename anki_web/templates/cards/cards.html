@@ -19,38 +19,72 @@
         </tr>
       </thead>
       <tbody>
-      <form action="{% url 'decks:select' pk=deck_id %}" method="post">
-          {% csrf_token %}
-            {% for card in cards %}
-            <tr>
-                <td>
-                    <input type="checkbox" name="select" value="{{ card.id }}">
-                </td>
-                <td>
-                    <a href="{% url 'cards:show_card' pk=card.id %}">{{ card.question | truncatechars:19 }}</a>
-                </td>
-                <td>
-                    {{ card.style__name }}
-                </td>
-                <td>
-                    {{ card.created_at | date:"Y-m-d" }}
-                </td>
-                <td>
-                    {{ card.review_date | date:"Y-m-d" }}
-                </td>
-            </tr>
-        {% endfor %}
-          <div class="row row-col-3">
-            <div class="col">
-                    <input class="btn btn-danger mb-2 mr-2" type="submit" onclick="delete_confirm(event)"value="Удалить">
-                <a class="btn btn-danger mb-2 mr-2" href="{% url 'decks:delete_all' pk=deck_id%}">Удалить все</a>
-            </div>
-            <div class="col"></div>
-              <div class="col">
-                    <a class="btn btn-primary mb-2 float-right" href="{% url 'decks:download' pk=deck_id%}">Скачать</a>
+      {% if deck_id %}
+        <form action="{% url 'decks:select' pk=deck_id %}" method="post">
+            {% csrf_token %}
+              {% for card in cards %}
+              <tr>
+                  <td>
+                      <input type="checkbox" name="select" value="{{ card.id }}">
+                  </td>
+                  <td>
+                      <a href="{% url 'cards:show_card' pk=card.id %}">{{ card.question | truncatechars:19 }}</a>
+                  </td>
+                  <td>
+                      {{ card.style__name }}
+                  </td>
+                  <td>
+                      {{ card.created_at | date:"Y-m-d" }}
+                  </td>
+                  <td>
+                      {{ card.review_date | date:"Y-m-d" }}
+                  </td>
+              </tr>
+            {% endfor %}
+                <div class="row row-col-3">
+                    <div class="col">
+                      <input class="btn btn-danger mb-2 mr-2" type="submit" onclick="delete_confirm(event)"value="Удалить">
+                        <a class="btn btn-danger mb-2 mr-2" href="{% url 'decks:delete_all' pk=deck_id%}">Удалить все</a>
+                    </div>
+                    <div class="col"></div>
+                    <div class="col">
+                        <a class="btn btn-primary mb-2 float-right" href="{% url 'decks:download' pk=deck_id%}">Скачать</a>
+                    </div>
                 </div>
-          </div>
-      </form>
+            {% else %}
+                <form action="{% url 'cards:select' %}" method="post">
+            {% csrf_token %}
+              {% for card in cards %}
+              <tr>
+                  <td>
+                      <input type="checkbox" name="select" value="{{ card.id }}">
+                  </td>
+                  <td>
+                      <a href="{% url 'cards:show_card' pk=card.id %}">{{ card.question | truncatechars:19 }}</a>
+                  </td>
+                  <td>
+                      {{ card.style__name }}
+                  </td>
+                  <td>
+                      {{ card.created_at | date:"Y-m-d" }}
+                  </td>
+                  <td>
+                      {{ card.review_date | date:"Y-m-d" }}
+                  </td>
+              </tr>
+                {% endfor %}
+                <div class="row row-col-3">
+                    <div class="col">
+                      <input class="btn btn-danger mb-2 mr-2" type="submit" onclick="delete_confirm(event)"value="Удалить">
+                        <a class="btn btn-danger mb-2 mr-2" href="{% url 'cards:delete_all' %}">Удалить все</a>
+                    </div>
+                    <div class="col"></div>
+                    <div class="col">
+                        <a class="btn btn-primary mb-2 float-right" href="{% url 'cards:download' %}">Скачать</a>
+                    </div>
+                </div>
+            {% endif %}
+        </form>
       </tbody>
     </table>
     <ul class="pagination pagination-sm justify-content-center">

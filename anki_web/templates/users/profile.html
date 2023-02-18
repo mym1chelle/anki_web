@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block title %}
+    {{ user }}
+{% endblock %}
+{% block content %}
+<div class="row align-items-center flex-row-reverse">
+                    <div class="col-lg-6">
+                        <div class="about-text go-to">
+                            <div class="row about-list">
+                                <div class="col-md-6">
+                                    <div class="media">
+                                        <label>Создан</label>&nbsp;
+                                        <p>{{ date_joined | date:"d M Y" }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="counter">
+                    <div class="row">
+                        <div class="col-6 col-lg-3">
+                            <div class="count-data text-center">
+                                <h6 class="count h2" data-to="500" data-speed="500">
+                                    <a href="{% url 'cards:all_cards'%}">{{ cards }}</a>
+                                </h6>
+                                <p class="m-0px font-w-600">Карточек</p>
+                            </div>
+                        </div>
+                        <div class="col-6 col-lg-3">
+                            <div class="count-data text-center">
+                                <h6 class="count h2" data-to="150" data-speed="150">
+                                    <a href="{% url 'decks:decks'%}">{{ decks }}</a>
+                                </h6>
+                                <p class="m-0px font-w-600">Колод</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+{% endblock %}

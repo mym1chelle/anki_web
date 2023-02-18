@@ -58,14 +58,14 @@ class CardsForStudy:
                 'repeat'
             )
             decks_.column("#0", width=0,  stretch=tk.NO)
-            decks_.column("deck", anchor=tk.CENTER, width=180)
-            decks_.column("new", anchor=tk.CENTER, width=180)
-            decks_.column("repeat", anchor=tk.CENTER, width=180)
+            decks_.column("deck", anchor='w', width=180)
+            decks_.column("new", anchor='w', width=180)
+            decks_.column("repeat", anchor='w', width=180)
 
-            decks_.heading("#0", text="", anchor=tk.CENTER)
-            decks_.heading("deck", text="Колода", anchor=tk.CENTER)
-            decks_.heading("new", text="Новые", anchor=tk.CENTER)
-            decks_.heading("repeat", text="Повтор", anchor=tk.CENTER)
+            decks_.heading("#0", text="", anchor='w')
+            decks_.heading("deck", text="Колода", anchor='w')
+            decks_.heading("new", text="Новые", anchor='w')
+            decks_.heading("repeat", text="Повтор", anchor='w')
 
             for num, deck in enumerate(study.json()):
                 decks_.insert(
@@ -100,7 +100,7 @@ class CardsForStudy:
                 cards_count = tk.Label(self.study_card_frame, text=f'Осталось: {count}')
                 cards_count.grid(row=1, column=0, columnspan=5)
                 if card_data.question_type == 'text' or card_data.question_type == 'md':
-                    card_question = ct.CTkTextbox(self.study_card_frame, width=570, fg_color=BG_COLOR)
+                    card_question = ct.CTkTextbox(self.study_card_frame, width=570, fg_color=BG_COLOR, font=("", 25))
                     card_question.tag_config("tag_name", justify='center')
                     card_question.insert('1.0', text=card_data.question)
                     card_question.tag_add("tag_name", "1.0", "end")
@@ -111,6 +111,7 @@ class CardsForStudy:
                         self.study_card_frame,
                         background=BG_COLOR,
                         html=card_data.question,
+                        font=("", 25)
                     )
                 card_question.grid(row=2, column=0, columnspan=5)
                 if self.buttons_frame:
@@ -124,14 +125,14 @@ class CardsForStudy:
                 show_answer_button.grid(row=5, column=0, columnspan=5, pady=15)
                 self.buttons_frame.pack(side=tk.BOTTOM)
             else:
-                no_cards = tk.Label(self.study_card_frame, text='На сегодня все', font=(None, 25))
+                no_cards = tk.Label(self.study_card_frame, text='На сегодня все', font=(None, 25, 'bold'), fg='green')
                 no_cards.grid(row=1, column=0, columnspan=5, pady=10)
             self.study_card_frame.pack()
 
     def show_answer(self, answer: str, card_id: int, deck_id: int):
         self.buttons_frame.forget()
         separator = ttk.Separator(self.study_card_frame, orient=tk.HORIZONTAL)
-        show_answer_textbox = ct.CTkTextbox(self.study_card_frame, width=570, fg_color=BG_COLOR)
+        show_answer_textbox = ct.CTkTextbox(self.study_card_frame, width=570, fg_color=BG_COLOR, font=("", 25))
         show_answer_textbox.tag_config("tag_name", justify='center')
         show_answer_textbox.insert('1.0', answer)
         show_answer_textbox.tag_add("tag_name", "1.0", "end")

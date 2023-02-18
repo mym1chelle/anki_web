@@ -26,7 +26,7 @@ urlpatterns = [
     path('api/v1/', include('anki_web.anki_api.urls')),
     path('', views.MainPageView.as_view(), name='main_page'),
     path('login/', views.LoginUserView.as_view(next_page='main_page'), name='login'),
-    path('logout', LogoutView.as_view(next_page='main_page'), name='logout'),
+    path('logout/', LogoutView.as_view(next_page='main_page'), name='logout'),
     path('users/', include('anki_web.users.urls')),
     path('decks/', include('anki_web.decks.urls')),
     path('cards/', include('anki_web.cards.urls')),
