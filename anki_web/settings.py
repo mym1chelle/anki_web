@@ -53,6 +53,9 @@ INSTALLED_APPS = [
     'drf_yasg',
     'debug_toolbar',
     'bootstrap4',
+    'tailwind',
+    'theme',
+    'django_browser_reload',
     'rest_framework',
     'anki_web',
     'anki_web.users',
@@ -72,7 +75,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'debug_toolbar.middleware.DebugToolbarMiddleware'
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
+    "django_browser_reload.middleware.BrowserReloadMiddleware"
 ]
 
 ROOT_URLCONF = 'anki_web.urls'
@@ -156,3 +160,5 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication',
     ),
 }
+
+TAILWIND_APP_NAME = 'theme'
