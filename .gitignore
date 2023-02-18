@@ -132,3 +132,5 @@ dmypy.json
 postgresql
 
 migrations
+
+pyinstaller
