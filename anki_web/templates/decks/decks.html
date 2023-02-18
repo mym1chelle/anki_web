@@ -1,11 +1,11 @@
 {% extends 'base.html' %}
 {% block title %}
-    {{ title }}
+{{ title }}
 {% endblock %}
 {% block content %}
-    <a class="nav-link" href="{% url 'decks:create' %}">Создать колоду</a>
-    <table class="table table-striped">
-      <thead>
+<a class="t-ml-3" href="{% url 'decks:create' %}">Создать колоду</a>
+<table class="table table-striped">
+    <thead>
         <tr>
             <th>Название</th>
             <th>Кол-во</th>
@@ -13,31 +13,31 @@
             <th></th>
             <th></th>
         </tr>
-      </thead>
-      <tbody>
+    </thead>
+    <tbody>
         {% for deck in decks %}
-            <tr>
-                <td>
-                    {% if deck.count == 0 %}
-                        {{ deck.name }}
-                    {% else %}
-                        <a href="{% url 'decks:cards' pk=deck.id %}">{{ deck.name }}</a>
-                    {% endif %}
-                </td>
-                <td>
-                    {{ deck.count }}
-                </td>
-                <td>
-                    <a href="{% url 'decks:create_card' pk=deck.id %}">Добавить карточку</a>
-                </td>
-                <td>
-                    <a href="{% url 'decks:upload' pk=deck.id %}">Загрузить карточки</a>
-                </td>
-                <td>
-                    <a href="{% url 'decks:delete' pk=deck.id %}">Удалить колоду</a>
-                </td>
-            </tr>
+        <tr>
+            <td>
+                {% if deck.count == 0 %}
+                {{ deck.name }}
+                {% else %}
+                <a href="{% url 'decks:cards' pk=deck.id %}">{{ deck.name }}</a>
+                {% endif %}
+            </td>
+            <td>
+                {{ deck.count }}
+            </td>
+            <td>
+                <a href="{% url 'decks:create_card' pk=deck.id %}">Добавить карточку</a>
+            </td>
+            <td>
+                <a href="{% url 'decks:upload' pk=deck.id %}">Загрузить карточки</a>
+            </td>
+            <td>
+                <a href="{% url 'decks:delete' pk=deck.id %}">Удалить колоду</a>
+            </td>
+        </tr>
         {% endfor %}
-      </tbody>
-    </table>
+    </tbody>
+</table>
 {% endblock %}

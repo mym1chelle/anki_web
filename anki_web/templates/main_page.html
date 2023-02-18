@@ -12,31 +12,31 @@
     <thead>
         <tr>
             <th class="t-py-5 t-pl-5">Колода</th>
-            <th>Новые</th>
-            <th>К повторению</th>
+            <th class="t-text-right">Новые</th>
+            <th class="t-text-right t-pr-5">К повторению</th>
         </tr>
     </thead>
     <tbody>
         {% for deck in decks %}
         <tr class=" odd:t-bg-gray-100">
             <td class="t-py-5 t-pl-5">
-                <a href="{% url 'decks:learn' pk=deck.id %}">{{ deck.name }}</a>
+                <a class="t-text-blue-600" href="{% url 'decks:learn' pk=deck.id %}">{{ deck.name }}</a>
             </td>
-            {% if deck.new_cards.count == 0 %}
-            <td class="text-muted">
+            {% if deck.new_cards == 0 %}
+            <td class="t-text-gray-300 t-text-right">
                 {{ deck.new_cards }}
             </td>
             {% else %}
-            <td class="text-success">
+            <td class="t-text-green-600 t-text-right">
                 {{ deck.new_cards}}
             </td>
             {% endif %}
-            {% if deck.old_cards.count == 0 %}
-            <td class="text-muted">
+            {% if deck.old_cards == 0 %}
+            <td class="t-text-gray-300 t-text-right t-pr-5">
                 {{ deck.old_cards}}
             </td>
             {% else %}
-            <td class="text-primary">
+            <td class="t-text-blue-600 t-text-right t-pr-5">
                 {{ deck.old_cards }}
             </td>
             {% endif %}
