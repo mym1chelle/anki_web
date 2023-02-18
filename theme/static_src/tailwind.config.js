@@ -6,6 +6,10 @@
  */
 
 module.exports = {
+    corePlugins: {
+        preflight: false,
+    },
+    prefix: 't-',
     content: [
         /**
          * HTML. Paths to Django template files that will contain Tailwind CSS classes.
