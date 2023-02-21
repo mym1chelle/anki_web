@@ -269,12 +269,15 @@ def show_answer(request, card_id):
             diff = difflib.ndiff(pattern, entered_word)
             equals_answers = []
             for i in diff:
+                print(i)
                 if i[0] == '+':
-                    equals_answers.append((i[-1], 'text-secondary'))
+                    pass
+                    # equals_answers.append((i[-1], 't-text-red-600'))
                 if i[0] == '-':
-                    equals_answers.append((i[-1], 'text-danger'))
+                    equals_answers.append((i[-1], 't-text-red-600'))
                 if i[0] == ' ':
-                    equals_answers.append((i[-1], 'text-success'))
+                    equals_answers.append((i[-1], 't-text-green-600'))
+
             return render(
                 request,
                 'cards/cards_answer.html',
