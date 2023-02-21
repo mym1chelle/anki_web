@@ -1,17 +1,19 @@
 {% extends 'base.html' %}
 {% load bootstrap4 %}
 {% block content %}
-  <form method="post">
-    {% csrf_token %}
-      {% if object.name %}
-        <p>Вы действительно хотите удалить колоду «{{ object.name }}»?</p>
-      {% elif object.question %}
-        <p>Вы действительно хотите удалить «{{ object.question }}»?</p>
-      {% elif deck %}
-        <p>Вы действительно хотите удалить все записи из колоды «{{ deck }}»?</p>
-      {% else %}
-        <p>Вы действительно хотите удалить все карточки?</p>
-      {% endif %}
-      {% bootstrap_button text_button button_type="submit" button_class="btn-danger" %}
-  </form>
+<form method="post">
+  {% csrf_token %}
+  {% if object.name %}
+  <p>Вы действительно хотите удалить колоду «{{ object.name }}»?</p>
+  {% elif object.question %}
+  <p>Вы действительно хотите удалить «{{ object.question }}»?</p>
+  {% elif deck %}
+  <p>Вы действительно хотите удалить все записи из колоды «{{ deck }}»?</p>
+  {% else %}
+  <p>Вы действительно хотите удалить все карточки?</p>
+  {% endif %}
+  <button
+    class="t-text-white t-bg-red-600 hover:t-bg-red-700 focus:t-ring-4 focus:t-outline-none focus:t-ring-blue-300 t-font-medium t-rounded-lg t-text-sm t-px-5 t-py-1.5 t-mt-2 t-text-center"
+    type="submit">{{ text_button }}</button>
+</form>
 {% endblock %}

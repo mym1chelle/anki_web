@@ -7,7 +7,7 @@ class CreateUserForm(UserCreationForm):
     password1 = forms.CharField(
         label="Пароль",
         widget=forms.PasswordInput(
-            attrs={'class': 't-text-gray-900 sm:t-text-sm t-rounded-lg t-block t-w-full t-py-1.5', 'type': 'password', 'align': 'center', 'placeholder': 'Пароль'}),
+            attrs={'class': 't-text-gray-900 sm:t-text-sm t-rounded-lg t-block t-w-full t-p-2.5', 'type': 'password', 'align': 'center', 'placeholder': 'Пароль'}),
     )
     password2 = forms.CharField(
         label="Повторите пароль",
@@ -36,7 +36,7 @@ class LoginUserForm(AuthenticationForm):
     password = forms.CharField(
         label="Пароль",
         widget=forms.PasswordInput(
-            attrs={'class': 't-text-gray-900 sm:t-text-sm t-rounded-lg t-block t-w-full t-py-1.5', 'type': 'password', 'align': 'center', 'placeholder': 'Пароль'}),
+            attrs={'class': 't-text-gray-900 sm:t-text-sm t-rounded-lg t-block t-w-full t-p-2.5', 'type': 'password', 'align': 'center', 'placeholder': 'Пароль'}),
     )
     username = UsernameField(
         widget=forms.TextInput(

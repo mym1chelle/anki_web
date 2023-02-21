@@ -9,7 +9,7 @@ from .forms import CreateUserForm
 class CreateUserView(CreateView):
     model = Users
     form_class = CreateUserForm
-    template_name = 'form.html'
+    template_name = 'registration.html'
     success_url = reverse_lazy('login')
 
     def get_context_data(self, **kwargs):
