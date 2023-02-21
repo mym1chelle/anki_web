@@ -29,13 +29,14 @@
         </p>
         {% endif %}
         {% if card.style == 2 %}
-        <div class="form-group text-center">
-            <form action="{% url 'decks:answer' card_id=card.id %}" method="post">
-                {% csrf_token %}
-                <textarea class="form-control" name="answer"></textarea>
-                <input class="btn btn-primary w-25 mt-2" type="submit" value="Ввести">
-            </form>
-        </div>
+        <form class="t-flex t-flex-col t-items-center t-w-full t-px-4" action="{% url 'decks:answer' card_id=card.id %}"
+            method="post">
+            {% csrf_token %}
+            <textarea class="t-resize-none t-border-gray-300 t-rounded-lg t-mb-4 t-w-full" name="answer"></textarea>
+            <input
+                class="t-text-white t-bg-blue-600 hover:t-bg-blue-700 focus:t-ring-4 focus:t-outline-none focus:t-ring-blue-300 t-font-medium t-rounded-lg t-text-sm t-px-5 t-py-2.5 t-text-center t-w-5/12"
+                type="submit" value="Ответ">
+        </form>
         {% else %}
         <a class=" t-text-white t-bg-blue-600 hover:t-bg-blue-700 focus:t-ring-4 focus:t-outline-none focus:t-ring-blue-300 t-font-medium t-rounded-lg t-text-sm t-px-5 t-py-2.5 t-text-center"
             href="{% url 'decks:answer' card_id=card.id %}">Ответ</a>
