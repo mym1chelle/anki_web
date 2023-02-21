@@ -1,4 +1,7 @@
 .answer {
     display: none;
 }
-a.show-answer:active ~  div.card-header h4.answer {display: block;}
+
+a.show-answer:active~div.card-header h4.answer {
+    display: block;
+}

@@ -1,47 +1,47 @@
-{% load bootstrap4 %}
 {% load static tailwind_tags %}
-{% bootstrap_javascript jquery='full' %}
 {% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="t-font-sans">
 
 <head>
-  {% bootstrap_css %}
-  {% tailwind_css %}
   <meta charset="UTF-8">
   <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}" />
   <script type="text/javascript" src="{% static 'js/main.js' %}"></script>
+  {% tailwind_css %}
   <title>Title</title>
 </head>
 
-<body class="t-d-flex t-flex-column t-min-vh-100">
-  <nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-3">
+<body class="t-min-vh-100 t-m-0">
+  <nav class=" t-bg-blue-600 mb-3 t-p-3">
     <ul class="t-flex t-list-none t-p-0 t-m-0 t-items-center t-gap-2 t-justify-between t-w-full">
       <li class="">
-        <a class="t-text-white hover:t-text-gray-200" href=" {% url 'main_page' %}">Web Anki</a>
+        <a class="t-text-white t-no-underline hover:t-underline" href=" {% url 'main_page' %}">Web
+          Anki</a>
       </li>
       {% if user.is_authenticated %}
       <div class="t-flex t-gap-2 t-justify-end">
         <li class="">
-          <a class="t-text-white hover:t-text-gray-200 t-uppercase" href=" {% url 'show_user' %}">{{ user.username}}</a>
+          <a class="t-text-white t-no-underline hover:t-underline" href=" {% url 'show_user' %}">
+            {{user.username}}
+          </a>
         </li>
         <li class="">
-          <a class="t-text-white hover:t-text-gray-200" href="{% url 'logout' %}">Выйти</a>
+          <a class="t-text-white t-no-underline hover:t-underline" href="{% url 'logout' %}">Выйти</a>
         </li>
       </div>
       {% else %}
       <div class="t-flex t-gap-2 t-justify-end">
         <li class="">
-          <a class="t-text-white hover:t-text-gray-200" href="{% url 'create' %}">Зарегистрироваться</a>
+          <a class="t-text-white t-no-underline hover:t-underline" href="{% url 'create' %}">Зарегистрироваться</a>
         </li>
         <li class="">
-          <a class="t-text-white hover:t-text-gray-200" href="{% url 'login' %}">Войти</a>
+          <a class="t-text-white t-no-underline hover:t-underline" href="{% url 'login' %}">Войти</a>
         </li>
       </div>
       {% endif %}
     </ul>
   </nav>
-  <div class="container">
+  <div class="t-container">
     <div class="row">
       <div class="col-md-12 mx-auto my-2">
         {% if messages %}
@@ -75,7 +75,7 @@
       </div>
     </div>
   </div>
-  <div class="container wrapper flex-grow-1">
+  <div class="t-w-11/12 sm:t-w-8/12 lg:t-w-6/12 t-mx-auto">
     <h1 class="t-mb-5">
       {% block title %}
       {% endblock %}

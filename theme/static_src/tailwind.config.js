@@ -7,7 +7,7 @@
 
 module.exports = {
     corePlugins: {
-        preflight: false,
+        preflight: true,
     },
     prefix: 't-',
     content: [

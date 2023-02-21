@@ -8,12 +8,12 @@
 {% block content %}
 <!-- class="table table-striped t-shadow" -->
 {% if request.user.is_authenticated %}
-<table class="t-w-full t-shadow">
+<table class="t-w-full t-border-collapse">
     <thead>
-        <tr>
-            <th class="t-py-5 t-pl-5">Колода</th>
-            <th class="t-text-right">Новые</th>
-            <th class="t-text-right t-pr-5">К повторению</th>
+        <tr class="">
+            <th class="t-text-left t-pl-5 t-pb-3">Колода</th>
+            <th class="t-text-right t-pb-3">Новые</th>
+            <th class="t-text-right t-pr-5 t-pb-3">К повторению</th>
         </tr>
     </thead>
     <tbody>
@@ -43,8 +43,9 @@
         </tr>
         {% endfor %}
         {% else %}
-        <p>Чтобы пользовать приложение <a href="{% url 'create' %}">зарегистрируйтесь</a> или <a
-                href="{% url 'login' %}">авторизируйтесь</a>
+        <p>Чтобы пользовать приложение <a class="t-text-blue-600 t-no-underline hover:t-underline"
+                href="{% url 'create' %}">зарегистрируйтесь</a> или <a
+                class="t-text-blue-600 t-no-underline hover:t-underline" href="{% url 'login' %}">авторизируйтесь</a>
         </p>
         {% endif %}
     </tbody>
