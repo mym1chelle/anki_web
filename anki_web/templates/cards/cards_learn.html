@@ -1,52 +1,46 @@
 {% extends 'base.html' %}
 {% load card_extras %}
-{% load bootstrap4 %}
-{% load static %}
-{% bootstrap_css %}
-{% bootstrap_javascript jquery='full' %}
 {% block content %}
-    {% if not card %}
-        <h4 class="text-center">На сегодня все!</h4>
-    {% else %}
-        <div class="row row-col-3">
-        <div class="col">
-            <p class="display-6 text-primary text-left">Осталось {{ count.count }} карточек</p>
+{% if not card %}
+<h4 class="t-text-center t-text-xl">На сегодня все!</h4>
+{% else %}
+<div class="t-flex t-flex-col t-gap-2">
+    <div class="t-flex t-flex-row t-justify-between t-w-full t-text-[12px]">
+        <p class="display-6 text-primary text-left">Осталось {{ count.count }} карточек</p>
+        <a class="t-text-blue-600 hover:t-underline" href="{% url 'cards:update' pk=card.id %}">
+            Редактировать
+        </a>
+    </div>
+    <div class="t-flex t-flex-col t-border t-items-center t-py-5 t-rounded-lg t-gap-5">
+        <h4 class="">Вопрос:</h4>
+        {% if card.question_type == 'md' %}
+        <p class="">{{ card.question | convert_markdown | safe }}</p>
+        {% elif card.question_type == 'html' %}
+        <p class="">
+            {% autoescape off %}
+            {{ card.question }}
+            {% endautoescape %}
+        </p>
+        {% elif card.question_type == 'text' %}
+        <p class="">
+            {% autoescape on %}
+            {{ card.question }}
+            {% endautoescape %}
+        </p>
+        {% endif %}
+        {% if card.style == 2 %}
+        <div class="form-group text-center">
+            <form action="{% url 'decks:answer' card_id=card.id %}" method="post">
+                {% csrf_token %}
+                <textarea class="form-control" name="answer"></textarea>
+                <input class="btn btn-primary w-25 mt-2" type="submit" value="Ввести">
+            </form>
         </div>
-        <div class="col"></div>
-        <div class="col">
-            <a href="{% url 'cards:update' pk=card.id %}"><p class="text-right">Редактировать</p></a>
-        </div>
-        </div>
-            <div class="card">
-                <div class="card-header bg-white">
-                    <h4 class="text-muted text-center">Вопрос:</h4>
-                    {% if card.question_type == 'md' %}
-                        <p class="text-center">{{ card.question | convert_markdown | safe }}</p>
-                    {% elif card.question_type == 'html' %}
-                            <p class="text-center">
-                                {% autoescape off %}
-                                    {{ card.question }}
-                                {% endautoescape %}
-                            </p>
-                    {% elif card.question_type == 'text' %}
-                            <p class="text-center">
-                                {% autoescape on %}
-                                    {{ card.question }}
-                                {% endautoescape %}
-                            </p>
-                    {% endif %}
-                    {% if card.style == 2 %}
-                    <div class="form-group text-center">
-                        <form action="{% url 'decks:answer' card_id=card.id %}" method="post">
-                            {% csrf_token %}
-                            <textarea class="form-control" name="answer"></textarea>
-                            <input class="btn btn-primary w-25 mt-2" type="submit" value="Ввести">
-                        </form>
-                    </div>
-                    {% else %}
-                        <a class="btn btn-primary d-block mx-auto w-25" href="{% url 'decks:answer' card_id=card.id %}">Ответ</a>
-                    {% endif %}
-                </div>
-            </div>
-    {% endif %}
+        {% else %}
+        <a class=" t-text-white t-bg-blue-600 hover:t-bg-blue-700 focus:t-ring-4 focus:t-outline-none focus:t-ring-blue-300 t-font-medium t-rounded-lg t-text-sm t-px-5 t-py-2.5 t-text-center"
+            href="{% url 'decks:answer' card_id=card.id %}">Ответ</a>
+        {% endif %}
+    </div>
+</div>
+{% endif %}
 {% endblock %}

@@ -13,7 +13,7 @@
 
 <body class="t-min-vh-100 t-m-0">
   <nav class=" t-bg-blue-600 mb-3 t-p-3">
-    <ul class="t-flex t-list-none t-p-0 t-m-0 t-items-center t-gap-2 t-justify-between t-w-full">
+    <ul class="t-flex t-list-none t-p-0 t-m-0 t-items-center t-justify-between t-w-full">
       <li class="">
         <a class="t-text-white t-no-underline hover:t-underline" href=" {% url 'main_page' %}">Web
           Anki</a>
@@ -76,10 +76,12 @@
     </div>
   </div>
   <div class="t-w-11/12 sm:t-w-8/12 lg:t-w-6/12 t-mx-auto">
-    <h1 class="t-mb-5">
-      {% block title %}
-      {% endblock %}
-    </h1>
+    <div class="t-flex t-flex-col t-gap-2 t-mt-2">
+      <h2 class="t-mb-5 t-text-4xl">
+        {% block title %}
+        {% endblock %}
+      </h2>
+    </div>
     {% block content %}
     {% endblock %}
   </div>
