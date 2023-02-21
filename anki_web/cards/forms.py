@@ -14,6 +14,26 @@ class CreateCardForm(forms.ModelForm):
             'style',
         ]
 
+        widgets = {
+            'question': forms.Textarea(attrs={
+                'class': "t-text-gray-900 sm:t-text-sm t-rounded-lg t-block t-w-full t-p-2.5 t-resize-none",
+                'placeholder': 'Вопрос'
+            }),
+            'question_type': forms.Select(attrs={
+                'class': "t-text-gray-900 sm:t-text-sm t-rounded-lg t-block t-w-full t-p-2.5 t-resize-none",
+            }),
+            'answer': forms.Textarea(attrs={
+                'class': "t-text-gray-900 sm:t-text-sm t-rounded-lg t-block t-w-full t-p-2.5 t-resize-none",
+                'placeholder': 'Ответ'
+            }),
+            'answer_type': forms.Select(attrs={
+                'class': "t-text-gray-900 sm:t-text-sm t-rounded-lg t-block t-w-full t-p-2.5 t-resize-none",
+            }),
+            'style': forms.Select(attrs={
+                'class': "t-text-gray-900 sm:t-text-sm t-rounded-lg t-block t-w-full t-p-2.5 t-resize-none",
+            })
+        }
+
 
 class UploadFileForm(forms.Form):
     TYPES = [

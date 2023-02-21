@@ -15,36 +15,38 @@
     </thead>
     <tbody>
         {% if deck_id %}
-        {% csrf_token %}
-        {% for card in cards %}
-        <tr class=" odd:t-bg-gray-100">
-            <td class="t-py-5 t-px-5">
-                <input type="checkbox" name="select" value="{{ card.id }}">
-            </td>
-            <td>
-                <a href="{% url 'cards:show_card' pk=card.id %}">{{ card.question | truncatechars:19 }}</a>
-            </td>
-            <td>
-                {{ card.created_at | date:"Y-m-d" }}
-            </td>
-            <td>
-                {{ card.review_date | date:"Y-m-d" }}
-            </td>
-        </tr>
-        {% endfor %}
-        <div class="t-flex t-flex-row t-justify-between t-text-xs">
-            <div class="t-flex t-flex-row t-gap-3 t-items-center">
-                <input
-                    class="t-border t-rounded-lg t-px-2 t-py-1.5 t-text-center t-text-xs t-text-red-600 t-border-red-600 hover:t-bg-red-600 hover:t-text-white"
-                    type="submit" onclick="delete_confirm(event)" value="Удалить">
-                <a class="t-border t-rounded-lg t-px-2 t-py-1.5 t-text-center t-text-xs t-text-red-600 t-border-red-600 hover:t-bg-red-600 hover:t-text-white"
-                    href="{% url 'decks:delete_all' pk=deck_id%}">Удалить все</a>
+        <form action="{% url 'cards:select' %}" method="post">
+            {% csrf_token %}
+            {% for card in cards %}
+            <tr class=" odd:t-bg-gray-100">
+                <td class="t-py-5 t-px-5">
+                    <input type="checkbox" name="select" value="{{ card.id }}">
+                </td>
+                <td>
+                    <a href="{% url 'cards:show_card' pk=card.id %}">{{ card.question | truncatechars:19 }}</a>
+                </td>
+                <td>
+                    {{ card.created_at | date:"Y-m-d" }}
+                </td>
+                <td>
+                    {{ card.review_date | date:"Y-m-d" }}
+                </td>
+            </tr>
+            {% endfor %}
+            <div class="t-flex t-flex-row t-justify-between t-text-xs">
+                <div class="t-flex t-flex-row t-gap-3 t-items-center">
+                    <input
+                        class="t-border t-rounded-lg t-px-2 t-py-1.5 t-text-center t-text-xs t-text-red-600 t-border-red-600 hover:t-bg-red-600 hover:t-text-white"
+                        type="submit" onclick="delete_confirm(event)" value="Удалить">
+                    <a class="t-border t-rounded-lg t-px-2 t-py-1.5 t-text-center t-text-xs t-text-red-600 t-border-red-600 hover:t-bg-red-600 hover:t-text-white"
+                        href="{% url 'decks:delete_all' pk=deck_id%}">Удалить все</a>
+                </div>
+                <div class="">
+                    <a class="t-border t-rounded-lg t-px-2 t-py-1.5 t-text-center t-text-xs t-text-green-600 t-border-green-600 hover:t-bg-green-600 hover:t-text-white"
+                        href="{% url 'decks:download' pk=deck_id%}">Скачать</a>
+                </div>
             </div>
-            <div class="">
-                <a class="t-border t-rounded-lg t-px-2 t-py-1.5 t-text-center t-text-xs t-text-green-600 t-border-green-600 hover:t-bg-green-600 hover:t-text-white"
-                    href="{% url 'decks:download' pk=deck_id%}">Скачать</a>
-            </div>
-        </div>
+        </form>
         {% else %}
         <form action="{% url 'cards:select' %}" method="post">
             {% csrf_token %}
