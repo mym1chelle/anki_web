@@ -11,7 +11,7 @@
             Редактировать
         </a>
     </div>
-    <div class="t-flex t-flex-col t-border t-items-center t-py-5 t-rounded-lg t-gap-5">
+    <div class="t-flex t-flex-col t-border t-items-center t-py-5 t-rounded-xl t-gap-5">
         <h4 class="">Вопрос:</h4>
         {% if card.question_type == 'md' %}
         <p class="">{{ card.question | convert_markdown | safe }}</p>

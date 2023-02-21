@@ -3,10 +3,14 @@
 {{ title }}
 {% endblock %}
 {% block content %}
-<a class="t-ml-3" href="{% url 'decks:create' %}">Создать колоду</a>
-<table class="table table-striped">
+<div class="t-flex t-flex-row t-justify-start">
+    <a class="t-border t-rounded-lg t-px-2 t-py-1.5 t-text-center t-text-xs t-text-green-600 t-border-green-600 hover:t-bg-green-600 hover:t-text-white"
+        href="{% url 'decks:create' %}">Создать колоду</a>
+</div>
+
+<table class="t-w-full t-border-collapse t-text-sm">
     <thead>
-        <tr>
+        <tr class="t-text-left">
             <th>Название</th>
             <th>Кол-во</th>
             <th></th>
@@ -16,25 +20,28 @@
     </thead>
     <tbody>
         {% for deck in decks %}
-        <tr>
-            <td>
+        <tr class=" odd:t-bg-gray-100">
+            <td class="t-py-5 t-px-5">
                 {% if deck.count == 0 %}
                 {{ deck.name }}
                 {% else %}
                 <a href="{% url 'decks:cards' pk=deck.id %}">{{ deck.name }}</a>
                 {% endif %}
             </td>
-            <td>
+            <td class="t-text-right">
                 {{ deck.count }}
             </td>
-            <td>
-                <a href="{% url 'decks:create_card' pk=deck.id %}">Добавить карточку</a>
+            <td class="t-text-xs t-pl-5">
+                <a class="t-text-green-600 hover:t-underline" href="{% url 'decks:create_card' pk=deck.id %}">Добавить
+                    карточку</a>
             </td>
-            <td>
-                <a href="{% url 'decks:upload' pk=deck.id %}">Загрузить карточки</a>
+            <td class="t-text-xs">
+                <a class="t-text-blue-600 hover:t-underline" href="{% url 'decks:upload' pk=deck.id %}">Загрузить
+                    карточки</a>
             </td>
-            <td>
-                <a href="{% url 'decks:delete' pk=deck.id %}">Удалить колоду</a>
+            <td class="t-text-xs">
+                <a class="t-text-red-600 hover:t-underline" href="{% url 'decks:delete' pk=deck.id %}">Удалить
+                    колоду</a>
             </td>
         </tr>
         {% endfor %}

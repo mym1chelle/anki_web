@@ -1,135 +1,126 @@
 {% extends 'base.html' %}
 {% load card_extras %}
-{% load bootstrap4 %}
-{% load static %}
-{% bootstrap_css %}
-{% bootstrap_javascript jquery='full' %}
 {% block title %}
-    {{ title }}
+{{ title }}
 {% endblock %}
 {% block content %}
-<table class="table table-striped" xmlns="http://www.w3.org/1999/html">
-      <thead>
-        <tr>
+<table class="t-w-full t-border-collapse t-text-sm">
+    <thead>
+        <tr class="t-text-left">
             <th></th>
             <th>Вопрос</th>
-            <th>Тип карточки</th>
             <th>Дата создания</th>
-            <th>Следующее повторение</th>
+            <th class="t-pl-2">Следующее повторение</th>
         </tr>
-      </thead>
-      <tbody>
-      {% if deck_id %}
-        <form action="{% url 'decks:select' pk=deck_id %}" method="post">
+    </thead>
+    <tbody>
+        {% if deck_id %}
+        {% csrf_token %}
+        {% for card in cards %}
+        <tr class=" odd:t-bg-gray-100">
+            <td class="t-py-5 t-px-5">
+                <input type="checkbox" name="select" value="{{ card.id }}">
+            </td>
+            <td>
+                <a href="{% url 'cards:show_card' pk=card.id %}">{{ card.question | truncatechars:19 }}</a>
+            </td>
+            <td>
+                {{ card.created_at | date:"Y-m-d" }}
+            </td>
+            <td>
+                {{ card.review_date | date:"Y-m-d" }}
+            </td>
+        </tr>
+        {% endfor %}
+        <div class="t-flex t-flex-row t-justify-between t-text-xs">
+            <div class="t-flex t-flex-row t-gap-3 t-items-center">
+                <input
+                    class="t-border t-rounded-lg t-px-2 t-py-1.5 t-text-center t-text-xs t-text-red-600 t-border-red-600 hover:t-bg-red-600 hover:t-text-white"
+                    type="submit" onclick="delete_confirm(event)" value="Удалить">
+                <a class="t-border t-rounded-lg t-px-2 t-py-1.5 t-text-center t-text-xs t-text-red-600 t-border-red-600 hover:t-bg-red-600 hover:t-text-white"
+                    href="{% url 'decks:delete_all' pk=deck_id%}">Удалить все</a>
+            </div>
+            <div class="">
+                <a class="t-border t-rounded-lg t-px-2 t-py-1.5 t-text-center t-text-xs t-text-green-600 t-border-green-600 hover:t-bg-green-600 hover:t-text-white"
+                    href="{% url 'decks:download' pk=deck_id%}">Скачать</a>
+            </div>
+        </div>
+        {% else %}
+        <form action="{% url 'cards:select' %}" method="post">
             {% csrf_token %}
-              {% for card in cards %}
-              <tr>
-                  <td>
-                      <input type="checkbox" name="select" value="{{ card.id }}">
-                  </td>
-                  <td>
-                      <a href="{% url 'cards:show_card' pk=card.id %}">{{ card.question | truncatechars:19 }}</a>
-                  </td>
-                  <td>
-                      {{ card.style__name }}
-                  </td>
-                  <td>
-                      {{ card.created_at | date:"Y-m-d" }}
-                  </td>
-                  <td>
-                      {{ card.review_date | date:"Y-m-d" }}
-                  </td>
-              </tr>
+            {% for card in cards %}
+            <tr class=" odd:t-bg-gray-100">
+                <td class="t-py-5 t-px-5">
+                    <input type="checkbox" name="select" value="{{ card.id }}">
+                </td>
+                <td>
+                    <a href="{% url 'cards:show_card' pk=card.id %}">{{ card.question | truncatechars:19 }}</a>
+                </td>
+                <td>
+                    {{ card.created_at | date:"Y-m-d" }}
+                </td>
+                <td>
+                    {{ card.review_date | date:"Y-m-d" }}
+                </td>
+            </tr>
             {% endfor %}
-                <div class="row row-col-3">
-                    <div class="col">
-                      <input class="btn btn-danger mb-2 mr-2" type="submit" onclick="delete_confirm(event)"value="Удалить">
-                        <a class="btn btn-danger mb-2 mr-2" href="{% url 'decks:delete_all' pk=deck_id%}">Удалить все</a>
-                    </div>
-                    <div class="col"></div>
-                    <div class="col">
-                        <a class="btn btn-primary mb-2 float-right" href="{% url 'decks:download' pk=deck_id%}">Скачать</a>
-                    </div>
+            <div class="t-flex t-flex-row t-justify-between t-text-xs">
+                <div class="t-flex t-flex-row t-gap-3 t-items-center">
+                    <input
+                        class="t-border t-rounded-lg t-px-2 t-py-1.5 t-text-center t-text-xs t-text-red-600 t-border-red-600 hover:t-bg-red-600 hover:t-text-white"
+                        type="submit" onclick="delete_confirm(event)" value="Удалить">
+                    <a class="t-border t-rounded-lg t-px-2 t-py-1.5 t-text-center t-text-xs t-text-red-600 t-border-red-600 hover:t-bg-red-600 hover:t-text-white"
+                        href="{% url 'cards:delete_all' %}">Удалить все</a>
                 </div>
-            {% else %}
-                <form action="{% url 'cards:select' %}" method="post">
-            {% csrf_token %}
-              {% for card in cards %}
-              <tr>
-                  <td>
-                      <input type="checkbox" name="select" value="{{ card.id }}">
-                  </td>
-                  <td>
-                      <a href="{% url 'cards:show_card' pk=card.id %}">{{ card.question | truncatechars:19 }}</a>
-                  </td>
-                  <td>
-                      {{ card.style__name }}
-                  </td>
-                  <td>
-                      {{ card.created_at | date:"Y-m-d" }}
-                  </td>
-                  <td>
-                      {{ card.review_date | date:"Y-m-d" }}
-                  </td>
-              </tr>
-                {% endfor %}
-                <div class="row row-col-3">
-                    <div class="col">
-                      <input class="btn btn-danger mb-2 mr-2" type="submit" onclick="delete_confirm(event)"value="Удалить">
-                        <a class="btn btn-danger mb-2 mr-2" href="{% url 'cards:delete_all' %}">Удалить все</a>
-                    </div>
-                    <div class="col"></div>
-                    <div class="col">
-                        <a class="btn btn-primary mb-2 float-right" href="{% url 'cards:download' %}">Скачать</a>
-                    </div>
+                <div class="">
+                    <a class="t-border t-rounded-lg t-px-2 t-py-1.5 t-text-center t-text-xs t-text-green-600 t-border-green-600 hover:t-bg-green-600 hover:t-text-white"
+                        href="{% url 'cards:download' %}">Скачать</a>
                 </div>
+            </div>
             {% endif %}
         </form>
-      </tbody>
-    </table>
-    <ul class="pagination pagination-sm justify-content-center">
+    </tbody>
+</table>
+<ul class="t-flex t-flex-row t-list-none t-mb-5 t-items-center t-justify-center t-gap-3 t-w-full t-text-blue-500">
     {% if page_obj.has_previous %}
-        {% if page_obj.number|add:'-3' > 1 %}
-            <li class="page-item">
-                <a class="page-link" href="?page=1">1</a>
-            </li>
-        {% endif %}
-        {% if page_obj.number|add:'-3' >= 3 %}
-            <li class="page-item pagination__item--dots">
-                    <a href="?page={{ page_obj.previous_page_number|add:'-3' }}">
-                <span class="page-link">• • •</span>
-                </a>
-            </li>
-        {% endif %}
+    {% if page_obj.number|add:'-3' > 1 %}
+    <li class="page-item">
+        <a class="page-link" href="?page=1">1</a>
+    </li>
+    {% endif %}
+    {% if page_obj.number|add:'-3' >= 3 %}
+    <li class="page-item pagination__item--dots">
+        <a href="?page={{ page_obj.previous_page_number|add:'-3' }}">
+            <span class="page-link">• • •</span>
+        </a>
+    </li>
+    {% endif %}
     {% endif %}
     {% if paginator.page_range|length > 1 %}
-        {% for i in paginator.page_range %}
-            {% if page_obj.number == i %}
-                <li class="page-item active">
-                    <a class="page-link" href="#">{{ i }}</a>
-                </li>
-            {% elif i > page_obj.number|add:'-4' and i < page_obj.number|add:'4' %}
-                <li class="page-item">
-                        <a class="page-link" href="?page={{ i }}">{{ i }}</a>
-                </li>
-            {% endif %}
+    {% for i in paginator.page_range %}
+    {% if page_obj.number == i %}
+    <li class="t-underline t-font-bold">
+        <a class="page-link" href="#">{{ i }}</a>
+    </li>
+    {% elif i > page_obj.number|add:'-4' and i < page_obj.number|add:'4' %} <li class="page-item">
+        <a class="page-link" href="?page={{ i }}">{{ i }}</a>
+        </li>
+        {% endif %}
         {% endfor %}
-    {% endif %}
-    {% if page_obj.has_next %}
-        {% if page_obj.number|add:'4' < page_obj.paginator.num_pages %}
-            <li class="page-item pagination__item--dots">
-                    <a href="?page={{ page_obj.next_page_number|add:'3' }}">
+        {% endif %}
+        {% if page_obj.has_next %}
+        {% if page_obj.number|add:'4' < page_obj.paginator.num_pages %} <li class="page-item pagination__item--dots">
+            <a href="?page={{ page_obj.next_page_number|add:'3' }}">
                 <span class="page-link">• • •</span>
+            </a>
+            </li>
+            {% endif %}
+            {% if page_obj.number|add:'3' < page_obj.paginator.num_pages %} <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">
+                    {{ page_obj.paginator.num_pages }}
                 </a>
-            </li>
-        {% endif %}
-        {% if page_obj.number|add:'3' < page_obj.paginator.num_pages %}
-            <li class="page-item">
-                    <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">
-                        {{ page_obj.paginator.num_pages }}
-                    </a>
-            </li>
-        {% endif %}
-    {% endif %}
+                </li>
+                {% endif %}
+                {% endif %}
 </ul>
 {% endblock %}

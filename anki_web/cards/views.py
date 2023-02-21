@@ -33,13 +33,14 @@ class ListCardsView(LoginRequiredMixin, ListView):
         ordering = self.get_ordering()
         queryset = self.model._default_manager.filter(
             deck=self.kwargs['pk']
-        ).select_related('style').values('id', 'question', 'created_at', 'review_date', 'style__name').order_by(*ordering)
+        ).values('id', 'question', 'created_at', 'review_date').order_by(*ordering)
+        print(queryset)
         return queryset
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['deck_id'] = self.kwargs['pk']
-        context['title'] = 'Все карточки'
+        context['title'] = Decks.objects.get(id=self.kwargs['pk'])
         return context
 
 
@@ -86,7 +87,8 @@ class CreateCardView(LoginRequiredMixin,
         try:
             Decks.objects.get(pk=self.kwargs['pk'])
         except ObjectDoesNotExist:
-            messages.error(self.request, 'Невозможно добавить карточку в несуществующую колоду')
+            messages.error(
+                self.request, 'Невозможно добавить карточку в несуществующую колоду')
             return redirect('decks:decks')
         else:
             return super().post(request, *args, **kwargs)
@@ -123,7 +125,7 @@ class DeleteCardView(SuccessMessageMixin, DeleteView):
     model = Cards
     success_url = reverse_lazy('decks:decks')
     success_message = 'Карточка успешно удалена'
-    
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['text_button'] = 'Удалить'
@@ -135,7 +137,8 @@ def upload_file(request, pk):
     try:
         Decks.objects.get(pk=pk)
     except ObjectDoesNotExist:
-        messages.error(request, 'Невозможно добавить карточки в несуществующую колоду')
+        messages.error(
+            request, 'Невозможно добавить карточки в несуществующую колоду')
         return redirect('decks:decks')
     else:
         if request.method == 'POST':
@@ -163,7 +166,8 @@ def upload_file(request, pk):
                             created_by=user,
                             random_num=randint(1, 2000)
                         )
-                    messages.success(request, 'Карточки были успешно импортированы')
+                    messages.success(
+                        request, 'Карточки были успешно импортированы')
                 return redirect(reverse_lazy('decks:cards', kwargs={'pk': pk}))
         else:
             form = UploadFileForm()
@@ -175,6 +179,7 @@ def upload_file(request, pk):
                 'text_button': 'Импортировать'
             }
         )
+
 
 @login_required
 def download_file(request, pk=None):
@@ -242,7 +247,8 @@ class ListCardsDayView(LoginRequiredMixin,
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         queryset = Cards.objects.filter(deck=self.kwargs['pk']).values('id')
-        queryset = queryset.filter(Q(review_date__isnull=True) | Q(review_date__lte=date.today()))
+        queryset = queryset.filter(
+            Q(review_date__isnull=True) | Q(review_date__lte=date.today()))
         count = queryset.aggregate(count=Count('id'))
         context['count'] = count
         return context
@@ -250,7 +256,8 @@ class ListCardsDayView(LoginRequiredMixin,
 
 def show_answer(request, card_id):
     try:
-        card = Cards.objects.filter(id=card_id).values('id', 'question', 'question_type', 'answer', 'answer_type', 'deck')[0]
+        card = Cards.objects.filter(id=card_id).values(
+            'id', 'question', 'question_type', 'answer', 'answer_type', 'deck')[0]
     except ObjectDoesNotExist:
         messages.error(request, 'Такой карточки нет')
         return redirect('/')
@@ -263,11 +270,11 @@ def show_answer(request, card_id):
             equals_answers = []
             for i in diff:
                 if i[0] == '+':
-                   equals_answers.append((i[-1], 'text-secondary'))
+                    equals_answers.append((i[-1], 'text-secondary'))
                 if i[0] == '-':
                     equals_answers.append((i[-1], 'text-danger'))
                 if i[0] == ' ':
-                    equals_answers.append((i[-1],'text-success'))
+                    equals_answers.append((i[-1], 'text-success'))
             return render(
                 request,
                 'cards/cards_answer.html',
@@ -314,7 +321,8 @@ class DeleteAllCardsView(SuccessMessageMixin, DeleteView):
             deck = Decks.objects.get(id=pk)
             queryset = self.model._default_manager.filter(deck=deck)
         else:
-            queryset = self.model._default_manager.filter(created_by=self.request.user.id)
+            queryset = self.model._default_manager.filter(
+                created_by=self.request.user.id)
         return queryset
 
     def get(self, request, *args, **kwargs):

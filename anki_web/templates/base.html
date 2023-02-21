@@ -41,49 +41,36 @@
       {% endif %}
     </ul>
   </nav>
-  <div class="t-container">
-    <div class="row">
-      <div class="col-md-12 mx-auto my-2">
-        {% if messages %}
-        {% for message in messages %}
-        {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-          {{ message }}
-          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        {% elif message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-          {{ message }}
-          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        {% else %}
-        <div class="alert alert-info alert-dismissible fade show" role="alert">
-          {{ message }}
-          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        {% endif %}
-        </li>
-        {% endfor %}
-        </ul>
-        {% endif %}
-      </div>
+  <div class="">
+    {% if messages %}
+    {% for message in messages %}
+    {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+    <div class="t-m-2 t-p-4 t-bg-red-300 t-rounded-md">
+      {{ message }}
     </div>
+    {% elif message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+    <div class="t-m-2 t-p-4 t-bg-green-300 t-rounded-md">
+      {{ message }}
+    </div>
+    {% else %}
+    <div class="t-m-2 t-p-4 t-bg-yellow-300 t-rounded-md">
+      {{ message }}
+    </div>
+    {% endif %}
+    </li>
+    {% endfor %}
+    </ul>
+    {% endif %}
   </div>
   <div class="t-w-11/12 sm:t-w-8/12 lg:t-w-6/12 t-mx-auto">
-    <div class="t-flex t-flex-col t-gap-2 t-mt-2">
+    <div class="t-flex t-flex-col t-gap-4 t-mt-4">
       <h2 class="t-mb-5 t-text-4xl">
         {% block title %}
         {% endblock %}
       </h2>
+      {% block content %}
+      {% endblock %}
     </div>
-    {% block content %}
-    {% endblock %}
   </div>
 </body>
 
