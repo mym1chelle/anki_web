@@ -1,8 +1,10 @@
 from django.views.generic import ListView
 from django.contrib.auth.views import LoginView
+from django.urls import reverse_lazy
 from datetime import date
 from django.db.models import Count, Q
 from anki_web.decks.models import Decks
+from anki_web.users.forms import LoginUserForm
 
 
 class MainPageView(ListView):
@@ -25,3 +27,10 @@ class MainPageView(ListView):
 
 class LoginUserView(LoginView):
     template_name = 'login.html'
+    form_class = LoginUserForm
+    redirect_authenticated_user = reverse_lazy('main_page')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['text_button'] = 'Вход'
+        return context

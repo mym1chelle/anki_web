@@ -1,18 +1,18 @@
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, UsernameField
 from django import forms
 from .models import Users
 
 
 class CreateUserForm(UserCreationForm):
     password1 = forms.CharField(
-        label="Password",
+        label="Пароль",
         widget=forms.PasswordInput(
-            attrs={'class': 't-text-gray-900 sm:t-text-sm t-rounded-lg t-block t-w-full t-py-2.5', 'type': 'password', 'align': 'center', 'placeholder': 'password'}),
+            attrs={'class': 't-text-gray-900 sm:t-text-sm t-rounded-lg t-block t-w-full t-py-1.5', 'type': 'password', 'align': 'center', 'placeholder': 'Пароль'}),
     )
     password2 = forms.CharField(
-        label="Confirm password",
+        label="Повторите пароль",
         widget=forms.PasswordInput(
-            attrs={'class': 't-text-gray-900 sm:t-text-sm t-rounded-lg t-block t-w-full t-p-2.5', 'type': 'password', 'align': 'center', 'placeholder': 'password'}),
+            attrs={'class': 't-text-gray-900 sm:t-text-sm t-rounded-lg t-block t-w-full t-p-2.5', 'type': 'password', 'align': 'center', 'placeholder': 'Пароль'}),
     )
 
     class Meta:
@@ -27,6 +27,23 @@ class CreateUserForm(UserCreationForm):
         widgets = {
             'username': forms.TextInput(attrs={
                 'class': "t-text-gray-900 sm:t-text-sm t-rounded-lg t-block t-w-full t-p-2.5",
-                'placeholder': 'username'
+                'placeholder': 'Имя пользователя'
             })
         }
+
+
+class LoginUserForm(AuthenticationForm):
+    password = forms.CharField(
+        label="Пароль",
+        widget=forms.PasswordInput(
+            attrs={'class': 't-text-gray-900 sm:t-text-sm t-rounded-lg t-block t-w-full t-py-1.5', 'type': 'password', 'align': 'center', 'placeholder': 'Пароль'}),
+    )
+    username = UsernameField(
+        widget=forms.TextInput(
+            attrs={
+                "autofocus": True,
+                'class': "t-text-gray-900 sm:t-text-sm t-rounded-lg t-block t-w-full t-p-2.5",
+                'placeholder': 'Имя пользователя'
+            }
+        )
+    )

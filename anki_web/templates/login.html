@@ -1,9 +1,24 @@
-{% extends 'base.html'%}
-{% load bootstrap4 %}
+{% extends 'base.html' %}
 {% block content %}
-    <form method="post">
+
+<div class=" t-bg-white t-rounded-lg t-shadow t-w-[400px] t-mx-auto">
+    <form class="t-flex t-flex-col t-gap-2 t-p-5" method="post">
         {% csrf_token %}
-        {% bootstrap_form form %}
-        {% bootstrap_button "Вход" button_type="submit" button_class="btn-primary" %}
+        {% for f in form %}
+        <label class="t-block t-text-sm t-font-medium t-text-gray-900" }>
+            {{ f.label}}</label>
+        {{ f }}
+        {% endfor %}
+        <p class="t-mt-2 t-text-pink-600 t-text-sm">{{ form.non_field_errors|striptags}}</p>
+        <button type="submit"
+            class="t-w-full t-text-white t-bg-blue-600 hover:t-bg-blue-700 focus:t-ring-4 focus:t-outline-none focus:t-ring-blue-300 t-font-medium t-rounded-lg t-text-sm t-px-5 t-py-2.5 t-text-center">
+            {{ text_button }}</button>
+        <p class="t-text-sm t-font-light t-text-gray-500">
+            Нет аккаунта? <a href="{% url 'create' %}"
+                class="t-font-medium t-text-blue-600 t-no-underline hover:t-underline">
+                Зарегистрироваться
+            </a>
+        </p>
     </form>
+</div>
 {% endblock %}
