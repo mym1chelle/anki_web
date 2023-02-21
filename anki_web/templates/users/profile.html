@@ -10,16 +10,16 @@
     <div class="t-flex t-list-none t-p-0 t-m-0 t-items-center t-gap-10">
         <div class="t-flex-col">
             <div class="">
-                <h6 class="count h2" data-to="500" data-speed="500">
-                    <a href="{% url 'cards:all_cards'%}">{{ cards }}</a>
+                <h6 class="t-text-3xl">
+                    <a class="t-text-blue-600 hover:t-text-blue-800" href="{% url 'cards:all_cards'%}">{{ cards }}</a>
                 </h6>
                 <p class="m-0px font-w-600">Карточек</p>
             </div>
         </div>
         <div class="t-flex-col">
             <div class="">
-                <h6 class="count h2" data-to="150" data-speed="150">
-                    <a href="{% url 'decks:decks'%}">{{ decks }}</a>
+                <h6 class="t-text-3xl">
+                    <a class="t-text-blue-600 hover:t-text-blue-800" href="{% url 'decks:decks'%}">{{ decks }}</a>
                 </h6>
                 <p class="m-0px font-w-600">Колод</p>
             </div>
