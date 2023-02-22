@@ -48,16 +48,25 @@
         {% if messages %}
         {% for message in messages %}
         {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
-        <div class="t-p-4 t-bg-red-300 t-rounded-md">
+        <div id="flash" class="t-p-4 t-bg-red-300 t-rounded-md">
           {{ message }}
+          <button id="close" onclick=" toggle();">
+            <span>&times;</span>
+          </button>
         </div>
         {% elif message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
-        <div class="t-p-4 t-bg-green-300 t-rounded-md">
+        <div id="flash" class="t-p-4 t-bg-green-300 t-rounded-md">
           {{ message }}
+          <button id="close" onclick="toggle();">
+            <span>&times;</span>
+          </button>
         </div>
         {% else %}
-        <div class="t-p-4 t-bg-yellow-300 t-rounded-md">
+        <div id="flash" class="t-p-4 t-bg-yellow-300 t-rounded-md">
           {{ message }}
+          <button id="close" onclick="toggle();">
+            <span>&times;</span>
+          </button>
         </div>
         {% endif %}
         </li>

@@ -9,3 +9,11 @@ input::file-selector-button:hover {
     background-color: rgb(50, 103, 227);
     color: white;
 }
+
+#close {
+    position: relative;
+    float: right;
+    top: -22px;
+    right: -11px;
+    font-size: x-large;
+}
