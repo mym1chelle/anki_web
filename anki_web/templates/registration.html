@@ -2,7 +2,7 @@
 {% block content %}
 
 <div class=" t-bg-white t-rounded-lg t-shadow t-w-[400px] t-mx-auto">
-  <form class="t-flex t-flex-col t-gap-2 t-p-5" method=" post">
+  <form class="t-flex t-flex-col t-gap-2 t-p-5" method="post">
     {% csrf_token %}
     {% for f in form %}
     <label class="t-block t-text-sm t-font-medium t-text-gray-900" }>

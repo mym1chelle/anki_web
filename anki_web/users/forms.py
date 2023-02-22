@@ -47,3 +47,19 @@ class LoginUserForm(AuthenticationForm):
             }
         )
     )
+
+
+class UpdateUserForm(forms.ModelForm):
+    class Meta:
+        model = Users
+
+        fields = [
+            'username',
+        ]
+
+        widgets = {
+            'username': forms.TextInput(attrs={
+                'class': "t-text-gray-900 sm:t-text-sm t-rounded-lg t-block t-w-full t-p-2.5",
+                'placeholder': 'Имя пользователя'
+            })
+        }

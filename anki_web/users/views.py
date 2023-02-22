@@ -1,12 +1,12 @@
-from django.views.generic import CreateView
+from django.views import generic
 from django.urls import reverse_lazy
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from .models import Users
-from .forms import CreateUserForm
+from .forms import CreateUserForm, UpdateUserForm
 
 
-class CreateUserView(CreateView):
+class CreateUserView(generic.CreateView):
     model = Users
     form_class = CreateUserForm
     template_name = 'registration.html'
@@ -34,3 +34,16 @@ def show_user(request):
             'decks': decks
         }
     )
+
+
+class UpdateUserInfoView(generic.UpdateView):
+    model = Users
+    form_class = UpdateUserForm
+    template_name = 'form.html'
+    success_url = reverse_lazy('show_user')
+    success_message = 'Пользователь был успешно обновлен'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['text_button'] = 'Обновить'
+        return context
