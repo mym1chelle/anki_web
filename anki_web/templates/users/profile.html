@@ -4,6 +4,7 @@
 {% endblock %}
 {% block content %}
 <a href="{% url 'update' pk=user.id %}">Обновить</a>
+<a href="{% url 'password' %}">Изменить пароль</a>
 <span class="t-text-xs">
     {{ date_joined | date:"d M Y" }}
 </span>

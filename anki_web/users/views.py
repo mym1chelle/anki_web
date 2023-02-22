@@ -1,7 +1,9 @@
 from django.views import generic
 from django.urls import reverse_lazy
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import PasswordChangeForm
 from .models import Users
 from .forms import CreateUserForm, UpdateUserForm
 
@@ -47,3 +49,27 @@ class UpdateUserInfoView(generic.UpdateView):
         context = super().get_context_data(**kwargs)
         context['text_button'] = 'Обновить'
         return context
+
+
+def change_password(request):
+    if request.method == 'GET':
+        form = PasswordChangeForm(user=request.user)
+        return render(
+            request,
+            template_name='form.html',
+            context={
+                'form': form,
+                'text_button': 'Изменить пароль'
+            }
+        )
+    elif request.method == 'POST':
+        form = PasswordChangeForm(user=request.user, data=request.POST)
+        if form.is_valid():
+            print('valid')
+            form.save()
+            messages.success(request, 'Пароль успешно изменен')
+            return redirect('login')
+        else:
+            print('invalid')
+            print(form.errors)
+            return render(request, 'form.html', {'form': form})
