@@ -11,26 +11,26 @@
             Редактировать
         </a>
     </div>
-    <div class="t-flex t-flex-col t-border t-items-center t-py-5 t-rounded-xl t-gap-5">
-        <h4 class="">Вопрос:</h4>
+    <div class="t-flex t-flex-col t-border t-text-center t-items-center t-py-5 t-rounded-xl t-gap-5">
+        <h4 class="t-text-sm">Вопрос:</h4>
         {% if card.question_type == 'md' %}
-        <p class="">{{ card.question | convert_markdown | safe }}</p>
+        <p class="t-px-2">{{ card.question | convert_markdown | safe }}</p>
         {% elif card.question_type == 'html' %}
-        <p class="">
+        <p class="t-px-2">
             {% autoescape off %}
             {{ card.question }}
             {% endautoescape %}
         </p>
         {% elif card.question_type == 'text' %}
-        <p class="">
+        <p class="t-px-2">
             {% autoescape on %}
             {{ card.question }}
             {% endautoescape %}
         </p>
         {% endif %}
         {% if card.style == 2 %}
-        <form class="t-flex t-flex-col t-items-center t-w-full t-px-4" action="{% url 'decks:answer' card_id=card.id %}"
-            method="post">
+        <form class="t-text-sm t-flex t-flex-col t-items-center t-w-full t-px-4"
+            action="{% url 'decks:answer' card_id=card.id %}" method="post">
             {% csrf_token %}
             <textarea class="t-resize-none t-border-gray-300 t-rounded-lg t-mb-4 t-w-full" name="answer"></textarea>
             <input

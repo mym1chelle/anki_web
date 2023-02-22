@@ -4,15 +4,15 @@
 <div class="t-flex t-flex-col t-gap-5 t-border t-rounded-xl t-text-center t-py-5">
     <h4 class="">Вопрос:</h4>
     {% if card.question_type == 'md' %}
-    <p class="">{{ card.question | convert_markdown | safe }}</p>
+    <p class="t-px-2">{{ card.question | convert_markdown | safe }}</p>
     {% elif card.question_type == 'html' %}
-    <p class="">
+    <p class="t-px-2">
         {% autoescape off %}
         {{ card.question }}
         {% endautoescape %}
     </p>
     {% elif card.question_type == 'text' %}
-    <p class="">
+    <p class="t-px-2">
         {% autoescape on %}
         {{ card.question }}
         {% endautoescape %}

@@ -23,7 +23,7 @@
         <tr class=" odd:t-bg-gray-100">
             <td class="t-py-5 t-px-5">
                 {% if deck.count == 0 %}
-                {{ deck.name }}
+                <span class="t-text-gray-500">{{ deck.name }}</span>
                 {% else %}
                 <a class="hover:t-underline" href="{% url 'decks:cards' pk=deck.id %}">{{ deck.name }}</a>
                 {% endif %}

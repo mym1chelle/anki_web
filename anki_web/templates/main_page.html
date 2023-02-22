@@ -20,7 +20,9 @@
         {% for deck in decks %}
         <tr class=" odd:t-bg-gray-100">
             <td class="t-py-5 t-pl-5">
-                <a class="t-text-blue-600" href="{% url 'decks:learn' pk=deck.id %}">{{ deck.name }}</a>
+                <a class="t-text-blue-600 hover:t-underline" href="{% url 'decks:learn' pk=deck.id %}">
+                    {{ deck.name}}
+                </a>
             </td>
             {% if deck.new_cards == 0 %}
             <td class="t-text-gray-300 t-text-right">
