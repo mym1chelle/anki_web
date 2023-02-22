@@ -1,7 +1,11 @@
-.answer {
-    display: none;
+input::file-selector-button {
+    padding: 0.3em;
+    border: thin solid rgb(50, 103, 227);
+    border-radius: 5px;
+    background-color: white;
 }
 
-a.show-answer:active~div.card-header h4.answer {
-    display: block;
+input::file-selector-button:hover {
+    background-color: rgb(50, 103, 227);
+    color: white;
 }

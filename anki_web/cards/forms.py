@@ -20,17 +20,17 @@ class CreateCardForm(forms.ModelForm):
                 'placeholder': 'Вопрос'
             }),
             'question_type': forms.Select(attrs={
-                'class': "t-text-gray-900 sm:t-text-sm t-rounded-lg t-block t-w-full t-p-2.5 t-resize-none",
+                'class': "t-text-gray-900 sm:t-text-sm t-rounded-lg t-block t-w-full t-p-2.5",
             }),
             'answer': forms.Textarea(attrs={
                 'class': "t-text-gray-900 sm:t-text-sm t-rounded-lg t-block t-w-full t-p-2.5 t-resize-none",
                 'placeholder': 'Ответ'
             }),
             'answer_type': forms.Select(attrs={
-                'class': "t-text-gray-900 sm:t-text-sm t-rounded-lg t-block t-w-full t-p-2.5 t-resize-none",
+                'class': "t-text-gray-900 sm:t-text-sm t-rounded-lg t-block t-w-full t-p-2.5",
             }),
             'style': forms.Select(attrs={
-                'class': "t-text-gray-900 sm:t-text-sm t-rounded-lg t-block t-w-full t-p-2.5 t-resize-none",
+                'class': "t-text-gray-900 sm:t-text-sm t-rounded-lg t-block t-w-full t-p-2.5",
             })
         }
 
@@ -44,17 +44,24 @@ class UploadFileForm(forms.Form):
 
     question_type = forms.ChoiceField(
         choices=TYPES,
-        widget=forms.Select,
+        widget=forms.Select(attrs={
+            'class': "t-text-gray-900 sm:t-text-sm t-rounded-lg t-block t-w-full t-p-2.5 t-resize-none",
+        }),
         label='Тип вопроса',
     )
     answer_type = forms.ChoiceField(
         choices=TYPES,
-        widget=forms.Select,
+        widget=forms.Select(attrs={
+            'class': "t-text-gray-900 sm:t-text-sm t-rounded-lg t-block t-w-full t-p-2.5",
+        }),
         label='Тип ответа'
     )
 
     card_style = forms.ModelChoiceField(
         queryset=Styles.objects.all(),
+        widget=forms.Select(attrs={
+            'class': "t-text-gray-900 sm:t-text-sm t-rounded-lg t-block t-w-full t-p-2.5 t-resize-none",
+        }),
         required=True,
         label='Стиль карточки'
     )

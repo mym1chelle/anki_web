@@ -1,9 +1,12 @@
 {% extends 'base.html' %}
-{% load bootstrap4 %}
 {% block content %}
-    <form method="post" enctype="multipart/form-data">
+<div class=" t-bg-white t-rounded-lg t-shadow t-w-[400px] t-mx-auto t-mb-4">
+    <form class="t-flex t-flex-col t-gap-2 t-p-5" method="post" enctype="multipart/form-data">
         {% csrf_token %}
-        {% bootstrap_form form %}
-        {% bootstrap_button "Загрузить" button_type="submit" button_class="btn-primary" %}
+        {{ form }}
+        <input
+            class="t-text-white t-w-full t-bg-blue-600 hover:t-bg-blue-700 focus:t-ring-4 focus:t-outline-none focus:t-ring-blue-300 t-font-medium t-rounded-lg t-text-sm t-px-5 t-py-2.5 t-text-center"
+            type="submit" value="Загрузить">
     </form>
+</div>
 {% endblock %}
