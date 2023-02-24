@@ -52,7 +52,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'drf_yasg',
     'debug_toolbar',
-    'bootstrap4',
     'tailwind',
     'theme',
     'django_browser_reload',

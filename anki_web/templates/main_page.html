@@ -1,12 +1,9 @@
 {% extends 'base.html' %}
-{% load bootstrap4 %}
 {% load static %}
-{% bootstrap_javascript jquery='full' %}
 {% block title %}
 Карточки для изучения
 {% endblock %}
 {% block content %}
-<!-- class="table table-striped t-shadow" -->
 {% if request.user.is_authenticated %}
 <table class="t-w-full t-border-collapse">
     <thead>
