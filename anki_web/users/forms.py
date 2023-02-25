@@ -87,3 +87,12 @@ class ChangePasswordForm(PasswordChangeForm):
         widget=forms.PasswordInput(
             attrs={'class': 't-text-gray-900 sm:t-text-sm t-rounded-lg t-block t-w-full t-p-2.5', 'type': 'password', 'align': 'center', 'placeholder': 'Пароль'}),
     )
+
+
+class AddEmailForm(forms.ModelForm):
+    class Meta:
+        model = Users
+
+        fields = [
+            'email'
+        ]

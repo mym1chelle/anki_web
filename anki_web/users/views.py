@@ -4,7 +4,7 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .models import Users
-from .forms import CreateUserForm, UpdateUserForm, ChangePasswordForm
+from .forms import CreateUserForm, UpdateUserForm, ChangePasswordForm, AddEmailForm
 
 
 class CreateUserView(generic.CreateView):
@@ -75,3 +75,17 @@ def change_password(request):
                 'form': form,
                 'text_button': 'Изменить пароль'
             })
+
+
+
+class AddEmailView(generic.UpdateView):
+    model = Users
+    form_class = AddEmailForm
+    template_name = 'form.html'
+    success_url = reverse_lazy('show_user')
+    success_message = 'Email был добавлен'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['text_button'] = 'Обновить'
+        return context
