@@ -16,7 +16,7 @@ from django.contrib.auth.views import (
     PasswordResetDoneView
 )
 from anki_web.forms import CustomResetPasswordForm
-from anki_web.mixins.castom_mixins import NotLoginRequiredMixin
+from anki_web.custom_mixins.mixins import NotLoginRequiredMixin
 
 
 class MainPageView(ListView):
