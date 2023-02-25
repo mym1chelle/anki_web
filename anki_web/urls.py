@@ -28,12 +28,13 @@ urlpatterns = [
     path('login/', views.LoginUserView.as_view(next_page='main_page'), name='login'),
     path('logout/', LogoutView.as_view(next_page='main_page'), name='logout'),
     path('password_reset/', views.ResetPasswordView.as_view(), name='password_reset'),
-    path('password_reset_done/', views.ResetPasswordDoneView.as_view(), name='password_reset_done'),
+    path('password_reset_done/', views.ResetPasswordDoneView.as_view(),
+         name='password_reset_done'),
     path('password_reset/<uidb64>/<token>/', views.ResetPasswordConfirmView.as_view(),
          name='password_reset_confirm'
          ),
-    path('password_reset_complete/', views.ResetPasswordCompleteView.as_view(
-        template_name='accounts/reset_password_sucess.html'), name='password_reset_complete'),
+    path('password_reset_complete/', views.ResetPasswordCompleteView.as_view(),
+         name='password_reset_complete'),
     path('users/', include('anki_web.users.urls')),
     path('decks/', include('anki_web.decks.urls')),
     path('cards/', include('anki_web.cards.urls')),

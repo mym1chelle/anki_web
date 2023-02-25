@@ -14,6 +14,7 @@ from pathlib import Path
 from dotenv import load_dotenv
 import dj_database_url
 import os
+from django.urls import reverse_lazy
 
 
 load_dotenv()
@@ -128,6 +129,8 @@ AUTH_PASSWORD_VALIDATORS = [
         'OPTIONS': {'min_length': 3},
     },
 ]
+
+LOGIN_URL = reverse_lazy('login')
 
 
 # Internationalization

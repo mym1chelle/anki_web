@@ -6,7 +6,7 @@ from datetime import date
 from django.contrib import messages
 from django.urls import reverse_lazy
 from django.db.models import ObjectDoesNotExist
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views.generic import ListView
 from django.contrib.auth.views import (
     LoginView,
@@ -80,11 +80,13 @@ class ResetPasswordView(NotLoginRequiredMixin, PasswordResetView):
 
 
 class ResetPasswordConfirmView(NotLoginRequiredMixin, PasswordResetConfirmView):
-    success_url = reverse_lazy('password_reset_complete')
+    pass
 
 
 class ResetPasswordCompleteView(NotLoginRequiredMixin, PasswordResetCompleteView):
-    pass
+    def get(self, request, *args, **kwargs):
+        messages.success(request, 'Пароль был успешно изменен')
+        return redirect(reverse_lazy('login'))
 
 
 class ResetPasswordDoneView(NotLoginRequiredMixin, PasswordResetDoneView):
