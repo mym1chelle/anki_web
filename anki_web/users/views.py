@@ -105,7 +105,7 @@ class AddEmailView(generic.UpdateView):
                                          'user': self.object,
                                          'domain': current_site.domain,
                                          'uid': urlsafe_base64_encode(force_bytes(self.object.pk)),
-                                         'token': default_token_generator.make_token(user=self.request.user)
+                                         'token': default_token_generator.make_token(user=self.object)
                                      })
         to_email = form.cleaned_data.get('email')
         email = EmailMessage(
