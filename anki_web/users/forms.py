@@ -1,4 +1,9 @@
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, UsernameField
+from django.contrib.auth.forms import (
+    UserCreationForm,
+    AuthenticationForm,
+    UsernameField,
+    PasswordChangeForm
+)
 from django import forms
 from .models import Users
 
@@ -65,15 +70,20 @@ class UpdateUserForm(forms.ModelForm):
         }
 
 
-# class ChangePasswordForm(forms.Form):
-#     old_password = forms.CharField(
-#         label="Текущий пароль",
-#         widget=forms.PasswordInput(
-#             attrs={'class': 't-text-gray-900 sm:t-text-sm t-rounded-lg t-block t-w-full t-p-2.5', 'type': 'password', 'align': 'center', 'placeholder': 'Пароль'}),
-#     )
-#     new_password = forms.CharField(
-#         min_length=3,
-#         label="Новый пароль",
-#         widget=forms.PasswordInput(
-#             attrs={'class': 't-text-gray-900 sm:t-text-sm t-rounded-lg t-block t-w-full t-p-2.5', 'type': 'password', 'align': 'center', 'placeholder': 'Пароль'}),
-#     )
+class ChangePasswordForm(PasswordChangeForm):
+    old_password = forms.CharField(
+        label="Текущий пароль",
+        widget=forms.PasswordInput(
+            attrs={'class': 't-text-gray-900 sm:t-text-sm t-rounded-lg t-block t-w-full t-p-2.5', 'type': 'password', 'align': 'center', 'placeholder': 'Пароль'}),
+    )
+    new_password1 = forms.CharField(
+        label="Новый пароль",
+        widget=forms.PasswordInput(
+            attrs={'class': 't-text-gray-900 sm:t-text-sm t-rounded-lg t-block t-w-full t-p-2.5', 'type': 'password', 'align': 'center', 'placeholder': 'Пароль'}),
+    )
+
+    new_password2 = forms.CharField(
+        label="Подтверждение нового пароля",
+        widget=forms.PasswordInput(
+            attrs={'class': 't-text-gray-900 sm:t-text-sm t-rounded-lg t-block t-w-full t-p-2.5', 'type': 'password', 'align': 'center', 'placeholder': 'Пароль'}),
+    )

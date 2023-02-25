@@ -3,9 +3,8 @@ from django.urls import reverse_lazy
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.forms import PasswordChangeForm
 from .models import Users
-from .forms import CreateUserForm, UpdateUserForm
+from .forms import CreateUserForm, UpdateUserForm, ChangePasswordForm
 
 
 class CreateUserView(generic.CreateView):
@@ -53,7 +52,7 @@ class UpdateUserInfoView(generic.UpdateView):
 
 def change_password(request):
     if request.method == 'GET':
-        form = PasswordChangeForm(user=request.user)
+        form = ChangePasswordForm(user=request.user)
         return render(
             request,
             template_name='form.html',
@@ -63,7 +62,7 @@ def change_password(request):
             }
         )
     elif request.method == 'POST':
-        form = PasswordChangeForm(user=request.user, data=request.POST)
+        form = ChangePasswordForm(user=request.user, data=request.POST)
         if form.is_valid():
             print('valid')
             form.save()
@@ -72,4 +71,7 @@ def change_password(request):
         else:
             print('invalid')
             print(form.errors)
-            return render(request, 'form.html', {'form': form})
+            return render(request, 'form.html', {
+                'form': form,
+                'text_button': 'Изменить пароль'
+            })
