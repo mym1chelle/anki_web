@@ -5,7 +5,13 @@
 {% block content %}
 <a href="{% url 'update' pk=user.id %}">Обновить</a>
 <a href="{% url 'password' %}">Изменить пароль</a>
+
+{% if user.email %}
+{{ user.email }} {% if user.email_is_active %} (подтвержен) {% else %} (не подтвержен) {% endif %}
+<a href="{% url 'add_email' pk=user.id %}">Изменить почту или подтвердить почту</a>
+{% else %}
 <a href="{% url 'add_email' pk=user.id %}">Добавить почту</a>
+{% endif %}
 <span class="t-text-xs">
     {{ date_joined | date:"d M Y" }}
 </span>
