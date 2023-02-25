@@ -1,5 +1,14 @@
 {% extends 'base.html' %}
+
+{% block title %}
+{{ title }}
+{% endblock %}
+
 {% block content %}
+
+{% if help_text %}
+<p>{{ help_text }}</p>
+{% endif %}
 
 <div class=" t-bg-white t-rounded-lg t-shadow t-w-[400px] t-mx-auto t-mb-4">
   <form class="t-flex t-flex-col t-gap-2 t-p-5" method="post">
