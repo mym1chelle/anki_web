@@ -8,12 +8,13 @@ from django.urls import reverse_lazy
 from django.db.models import ObjectDoesNotExist
 from django.shortcuts import render, redirect
 from django.views.generic import ListView
+from django.views.generic.base import TemplateView
 from django.contrib.auth.views import (
     LoginView,
     PasswordResetView,
     PasswordResetConfirmView,
     PasswordResetCompleteView,
-    PasswordResetDoneView
+    PasswordContextMixin
 )
 from anki_web.forms import CustomResetPasswordForm
 from anki_web.custom_mixins.mixins import NotLoginRequiredMixin
@@ -80,8 +81,12 @@ class ResetPasswordView(NotLoginRequiredMixin, PasswordResetView):
 
 
 class ResetPasswordConfirmView(NotLoginRequiredMixin, PasswordResetConfirmView):
-    pass
+    template_name = 'form.html'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['text_button'] = 'Изменить пароль'
+        return context
 
 class ResetPasswordCompleteView(NotLoginRequiredMixin, PasswordResetCompleteView):
     def get(self, request, *args, **kwargs):
@@ -89,5 +94,14 @@ class ResetPasswordCompleteView(NotLoginRequiredMixin, PasswordResetCompleteView
         return redirect(reverse_lazy('login'))
 
 
-class ResetPasswordDoneView(NotLoginRequiredMixin, PasswordResetDoneView):
-    pass
+class ResetPasswordDoneView(NotLoginRequiredMixin, PasswordContextMixin, TemplateView):
+    template_name = "users/info_message.html"
+    title = "Письмо с инструкциями по восстановлению пароля отправлено"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['main_text'] = """
+        Мы отправили вам инструкцию по установке нового пароля на указанный адрес электронной почты (если в нашей базе данных есть такой адрес). Вы должны получить ее в ближайшее время.
+        Если вы не получили письмо, пожалуйста, убедитесь, что вы ввели адрес с которым Вы зарегистрировались, и проверьте папку со спамом.
+        """
+        return context
